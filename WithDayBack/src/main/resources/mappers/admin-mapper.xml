@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.withdayback.admin.dao.AdminDao">
+    <select id="selectAllMember" resultType="User">
+        select profile_image, nickname, email, provider, gender, birthday, status, created_at
+        from user
+
+        <where>
+            <!-- 닉네임 / 이메일 검색 -->
+            <if test="keyword != null and keyword != ''">
+                <!-- 하나의 조건으로 묶기 위해 괄호로 묶음 -->
+                (
+                <!-- MyBatis가 문자열 안 #{} 를 제대로 처리 못함 -->
+                nickname like concat('%', #{keyword}, '%')   <!-- => '%keyword%' -->
+                or email like concat('%', #{keyword}, '%')
+                )
+            </if>
+            <!-- 성별 조건 있을 때 성별 조건 -->
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <!-- 가입경로 provider -->
+            <if test="provider != null and provider != ''">
+                and provider = #{provider}
+            </if>
+            <!-- 회원 상태 status -->
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+
+        <choose>
+            <!-- 기본 정렬 -->
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+
+        limit #{offset}, #{size}
+    </select>
+
+    <update id="changeRole" parameterType="string">
+        UPDATE user
+        SET status = 'admin'
+        WHERE email = #{email}
+    </update>
+
+    <update id="suspendUser" parameterType="string">
+        UPDATE user
+        SET status = 'suspended'
+        WHERE email = #{email}
+    </update>
+
+    <update id="releaseUser" parameterType="string">
+        UPDATE user
+        SET status = 'active'
+        WHERE email = #{email}
+    </update>
+
+    <select id="selectMemberCount"
+            parameterType="com.test.withdayback.admin.dto.AdminMemberRequest"
+            resultType="int">
+        select count(*)
+        from user
+
+        <where>
+            <if test="keyword != null and keyword != ''">
+                (
+                nickname like CONCAT('%', #{keyword}, '%')
+                or email like CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+
+            <if test="provider != null and provider != ''">
+                and provider = #{provider}
+            </if>
+
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectUserCount" resultType="int">
+        select count(*)
+        from user
+    </select>
+
+    <select id="selectScheduleCount" resultType="int">
+        select count(*)
+        from schedule
+    </select>
+
+    <insert id="insertDashboard">
+        insert into dashboard (stat_date, total_user_count, total_schedule_count)
+        values (#{statDate}, #{userCount}, #{scheduleCount})
+    </insert>
+
+    <select id="selectTotalUserCount" resultType="int">
+        <!-- coalesce - null 값이면 다른 값 coalesce(쿼리, n)값으로 대체 -->
+        <!-- coalesce(쿼리, 값1, 값2, ...) null이 아닌 첫 번쨰 값으로 대체 -->
+        select coalesce(
+        (select total_user_count
+        from dashboard
+        order by stat_date desc
+        limit 1 ),
+        0
+        )
+    </select>
+
+    <select id="selectTotalScheduleCount" resultType="int">
+        select coalesce(
+                       (select total_schedule_count
+                        from dashboard
+                        order by stat_date desc
+                       limit 1 ),
+        0
+        )
+    </select>
+
+    <select id="selectRecommendedScheduleCount" resultType="int">
+        select count(*)
+        from recommended_schedule
+    </select>
+
+    <select id="selectCompletedScheduleCount" resultType="int">
+        select count(*)
+        from schedule
+        where status = 'completed'
+    </select>
+
+    <select id="selectClosedScheduleCount" resultType="int">
+        select count(*)
+        from schedule
+        where status = 'closed'
+    </select>
+
+    <select id="selectDailyDashboard" resultType="Dashboard">
+        select *
+        from (
+        select
+        stat_date,
+        total_user_count,
+        total_schedule_count
+        from dashboard
+        order by stat_date desc
+        limit 14 <!-- 최근부터 2주간 기록 -->
+        ) d
+        order by stat_date asc <!-- 최근부터 2주간 기록을 역순으로 -->
+    </select>
+
+    <select id="selectWeeklyDashboard" resultType="Dashboard">
+        select
+        max(stat_date) as stat_date,
+        max(total_user_count) as total_user_count,
+        max(total_schedule_count) as total_schedule_count
+        from dashboard
+        <!-- 날짜별로 저장된 데이터를 주 단위로 묶어서 집계 -->
+        group by
+        year(stat_date), <!-- 날짜의 연도, 사용 않을 시 n년 간의 n주가 동일하게 묶임 -->
+        week(stat_date, 1) <!-- 해당 날짜가 몇 번째 주인지 -->
+        <!-- 20nn년, n주차 처럼 처리됨 -->
+        order by stat_date
+    </select>
+
+    <select id="selectMonthlyDashboard" resultType="Dashboard">
+        select
+        max(stat_date) as stat_date,
+        max(total_user_count) as total_user_count,
+        max(total_schedule_count) as total_schedule_count
+        from dashboard
+        <!-- 날짜별로 저장된 데이터를 월 단위로 묶어서 집계 -->
+        group by
+        year(stat_date), <!-- 날짜의 연도, 사용 않을 시 n년 간의 n월이 동일하게 묶임 -->
+        month(stat_date) <!-- 해당 날짜가 몇 번째 월인지 -->
+        <!-- 20nn년, n월 처럼 처리됨 -->
+        order by stat_date
+    </select>
+
+    <!-- ========================= -->
+    <!-- 약관 관리 -->
+    <!-- ========================= -->
+
+    <select id="selectAllTerms" resultType="Terms">
+        select
+            id,
+            type,
+            version,
+            content,
+            is_required as isRequired
+        from terms
+        order by id
+    </select>
+
+    <select id="selectTermsCountById" parameterType="Long" resultType="int">
+        select count(*)
+        from terms
+        where id = #{id}
+    </select>
+
+    <update id="updateTerms">
+        update terms
+        set
+            version = #{request.version},
+            content = #{request.content}
+        where id = #{id}
+    </update>
+
+    <!-- ========================= -->
+    <!-- 관심사 관리 -->
+    <!-- ========================= -->
+
+    <select id="selectAllInterests" resultType="Interest">
+        select
+            id as id,
+            name as interestName,
+            icon_name as iconName
+        from interests
+        order by id
+    </select>
+
+    <select id="selectInterestCountById" parameterType="Long" resultType="int">
+        select count(*)
+        from interests
+        where id = #{id}
+    </select>
+
+    <select id="selectInterestCountByName" parameterType="String" resultType="int">
+        select count(*)
+        from interests
+        where name = #{interestName}
+    </select>
+
+    <select id="selectInterestCountByNameExceptId" resultType="int">
+        select count(*)
+        from interests
+        where name = #{interestName}
+          and id != #{id}
+    </select>
+
+    <insert id="insertInterest" parameterType="com.test.withdayback.admin.dto.AdminInterestRequest">
+        insert into interests (
+            name,
+            icon_name
+        ) values (
+                     #{interestName},
+                     #{iconName}
+                 )
+    </insert>
+
+    <update id="updateInterest">
+        update interests
+        set
+            name = #{request.interestName},
+            icon_name = #{request.iconName}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteInterest" parameterType="Long">
+        delete from interests
+        where id = #{id}
+    </delete>
+
+    <select id="selectAllSchedule"
+            parameterType="AdminScheduleRequest"
+            resultType="AdminSchedule">
+        select
+        s.id,
+        s.title,
+        u.nickname,
+        s.status,
+        s.region,
+        s.detail_region,
+        s.is_public,
+        s.created_at as createdAt
+        from schedule s
+        inner join user u
+        on s.user_id = u.id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (
+                s.title like concat('%', #{keyword}, '%')
+                or
+                u.nickname like concat('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="region != null and region != ''">
+                and s.region = #{region}
+            </if>
+            <if test="detailRegion != null and detailRegion != ''">
+                and s.detail_region = #{detailRegion}
+            </if>
+            <if test="status != null and status != ''">
+                and s.status = #{status}
+            </if>
+        </where>
+        order by s.created_at desc
+        limit #{size}
+        offset #{offset}
+    </select>
+
+    <select id="selectAllScheduleCount"
+            parameterType="AdminScheduleRequest"
+            resultType="int">
+        select count(*)
+        from schedule s
+        inner join user u
+        on s.user_id = u.id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (
+                s.title like concat('%', #{keyword}, '%')
+                or
+                u.nickname like concat('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="region != null and region != ''">
+                and s.region = #{region}
+            </if>
+            <if test="detailRegion != null and detailRegion != ''">
+                and s.detail_region = #{detailRegion}
+            </if>
+            <if test="status != null and status != ''">
+                and s.status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <!-- 일정 공개 상태 변경 -->
+    <update id="updateSchedulePublic">
+        update schedule
+        set is_public =
+        case
+            <!-- 공개 / 비공개 토글 -->
+            when is_public = 1 then 0
+            else 1
+        end
+        where id = #{scheduleId}
+    </update>
+
+    <delete id="deleteSchedule">
+        delete from schedule
+        where id = #{scheduleId}
+    </delete>
+</mapper>

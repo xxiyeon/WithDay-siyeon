@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.withdayback.schedule.dao.BookmarkDao">
+
+    <!--
+        exists 쿼리는 토글 멱등성과 단건 상태 조회의 공통 기반이다.
+        count(*) > 0 형태보다 EXISTS가 "존재 여부만 확인한다"는 의도가 더 분명하고, DB도 첫 매칭에서 멈출 수 있다.
+    -->
+    <select id="existsBookmark" resultType="boolean">
+        SELECT EXISTS(
+            SELECT 1
+            FROM bookmark
+            WHERE user_id = #{userId}
+              AND schedule_id = #{scheduleId}
+        )
+    </select>
+
+    <insert id="insertBookmark">
+        INSERT INTO bookmark (
+            user_id,
+            schedule_id,
+            created_at
+        ) VALUES (
+            #{userId},
+            #{scheduleId},
+            NOW()
+        )
+    </insert>
+
+    <delete id="deleteBookmark">
+        DELETE FROM bookmark
+        WHERE user_id = #{userId}
+          AND schedule_id = #{scheduleId}
+    </delete>
+
+    <!--
+        위시리스트는 "언제 저장했는가"가 정렬 기준이므로 bookmark를 driving table로 둔다.
+        이렇게 해야 schedule 최신 생성순이 아니라 사용자의 저장 시점 최신순을 정확히 보장할 수 있다.
+    -->
+    <select id="selectBookmarkedSchedules" resultType="Schedule">
+        SELECT
+            s.id,
+            s.user_id              AS userId,
+            s.title,
+            s.description,
+            s.category,
+            s.region,
+            s.detail_region        AS detailRegion,
+            s.chat_link            AS chatLink,
+            s.start_date           AS startDate,
+            s.end_date             AS endDate,
+            s.recruit_start_date   AS recruitStartDate,
+            s.recruit_end_date     AS recruitEndDate,
+            s.min_participants     AS minParticipants,
+            s.max_participants     AS maxParticipants,
+            s.current_participants AS currentParticipants,
+            s.age_min              AS ageMin,
+            s.age_max              AS ageMax,
+            s.gender_limit         AS genderLimit,
+            s.total_price          AS totalPrice,
+            s.cost_type            AS costType,
+            s.thumbnail_image      AS thumbnailImage,
+            s.view_count           AS viewCount,
+            s.status,
+            s.is_public            AS isPublic,
+            s.cancel_deadline      AS cancelDeadline,
+            s.created_at           AS createdAt,
+            s.updated_at           AS updatedAt,
+            s.deleted_at           AS deletedAt,
+            TRUE                   AS isBookmarked
+        FROM bookmark b
+        INNER JOIN schedule s
+                ON s.id = b.schedule_id
+        WHERE b.user_id = #{userId}
+          AND s.deleted_at IS NULL
+        ORDER BY b.created_at DESC, b.id DESC
+    </select>
+</mapper>

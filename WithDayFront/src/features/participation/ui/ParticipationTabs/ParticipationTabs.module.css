@@ -1,0 +1,84 @@
+.tabList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+.tabButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: 0.84rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.tabButton:hover {
+  border-color: var(--color-primary-soft);
+}
+
+.tabButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.tabButtonActive {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.tabLabel {
+  min-width: 0;
+  line-height: 1;
+}
+
+.tabCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.tabButton:not(.tabButtonActive) .tabCount {
+  background: var(--color-surface-soft);
+  color: var(--color-primary);
+}
+
+@media (min-width: 768px) {
+  .tabList {
+    gap: 10px;
+  }
+
+  .tabButton {
+    padding: 0 16px;
+    font-size: 0.95rem;
+  }
+
+  .tabCount {
+    min-width: 24px;
+    height: 24px;
+    padding: 0 7px;
+    font-size: 0.78rem;
+  }
+}

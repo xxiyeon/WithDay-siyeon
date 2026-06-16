@@ -1,0 +1,744 @@
+/* 상세 페이지 전체 배경과 하단 네비게이션 여백을 책임지는 최상위 컨테이너다. */
+.container {
+  min-height: 100vh;
+  padding-bottom: calc(var(--bottom-nav-total-height, 72px) + 40px);
+  background: var(--color-bg, #f8fafc);
+  color: var(--color-text-primary, #1e293b);
+}
+
+/* 본문 폭을 제한해 1440px 이상에서도 읽기 폭이 과도하게 넓어지지 않게 한다. */
+.page {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 28px 0 40px;
+}
+
+/* 데스크톱 기본 레이아웃: 본문 1fr + 우측 360px sticky 사이드바 구조다. */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 28px;
+  align-items: start;
+}
+
+/* grid/flex 자식이 긴 텍스트 때문에 부모 폭을 밀어내지 않도록 공통 min-width를 제거한다. */
+.mainColumn,
+.sideColumn {
+  min-width: 0;
+}
+
+/* 메인 컬럼은 hero, 제목/조건, 상세 설명을 카드 단위로 세로 배치한다. */
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 사이드바는 기존 일정 상세보기와 동일하게 페이지 스크롤을 따라 움직이도록 한다. */
+/* 자체 스크롤을 만들지 않고, sticky 위치만 유지한다. */
+.sideColumn {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 모든 주요 상세 섹션이 공유하는 카드 surface다. */
+.panel {
+  border: 1px solid var(--color-border-light, #e2e8f0);
+  border-radius: var(--radius-md);
+  background: var(--color-surface, #ffffff);
+  box-shadow: var(--shadow-panel, 0 18px 45px rgba(15, 23, 42, 0.08));
+}
+
+/* hero 카드는 이미지가 radius 밖으로 삐져나오지 않게 overflow를 자른다. */
+.heroCard {
+  overflow: hidden;
+}
+
+/* 대표 이미지 영역은 16:9 비율을 기본으로 하되 최소 높이를 둬 데스크톱 시안의 존재감을 유지한다. */
+.heroImageWrap {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  min-height: 320px;
+  overflow: hidden;
+  background: var(--color-border-light, #f1f5f9);
+}
+
+/* 이미지는 업로드 비율이 달라도 hero frame을 꽉 채우는 것이 우선이다. */
+.heroImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center center;
+  cursor: zoom-in;
+}
+
+/* 카테고리/상태/D-day 배지를 이미지 위에 겹쳐 핵심 상태를 첫 화면에서 확인하게 한다. */
+.heroBadges {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  right: 18px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* hero 위 배지는 이미지 대비를 위해 공통 blur 배경과 pill radius를 사용한다. */
+.categoryBadge,
+.ddayBadge,
+.statusOpen {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  backdrop-filter: blur(10px);
+}
+
+/* 카테고리 배지는 이미지 위에서도 읽히도록 거의 흰색 surface를 사용한다. */
+.categoryBadge {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-text-primary, #1e293b);
+}
+
+/* 추천 일정 배지는 기존 모집중 배지 위치/형태를 유지하면서 WithDay 포인트 컬러를 사용한다. */
+.statusOpen {
+  background: rgba(37, 99, 235, 0.92);
+  color: #ffffff;
+}
+
+/* 추천 기간은 오른쪽 끝으로 밀어 이미지 위 상태 정보 중 시간성 값을 분리한다. */
+.ddayBadge {
+  margin-left: auto;
+  background: rgba(15, 23, 42, 0.78);
+  color: #ffffff;
+}
+
+/* 이미지 이전/다음 버튼은 hero 위에 고정된 원형 컨트롤로 유지한다. */
+.imageNav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.58);
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* hover 가능한 이미지 컨트롤만 대비와 크기를 살짝 올린다. */
+.imageNav:hover {
+  background: rgba(15, 23, 42, 0.78);
+  transform: translateY(-50%) scale(1.04);
+}
+
+/* 이미지가 1장일 때 disabled 상태를 명확히 보여 불필요한 클릭 기대를 줄인다. */
+.imageNav:disabled {
+  background: rgba(15, 23, 42, 0.22);
+  color: rgba(255, 255, 255, 0.65);
+  cursor: not-allowed;
+  transform: translateY(-50%);
+}
+
+/* 이전 버튼 위치다. hero 좌측 여백과 배지 여백을 맞춘다. */
+.prevBtn {
+  left: 18px;
+}
+
+/* 다음 버튼 위치다. hero 우측 여백과 이미지 카운트 위치를 맞춘다. */
+.nextBtn {
+  right: 18px;
+}
+
+/* 현재 이미지 순서를 알려주는 카운터다. lightbox 진입 전 사용자가 이미지 개수를 알 수 있게 한다. */
+.imageCount {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.7);
+  color: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+/* 썸네일 스트립은 최대 3개 이미지를 동일 폭으로 보여주는 보조 탐색 영역이다. */
+.thumbStrip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding: 14px;
+  background: var(--color-surface, #ffffff);
+}
+
+/* 개별 썸네일 버튼이다. */
+.thumb {
+  position: relative;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-border-light, #f1f5f9);
+  cursor: pointer;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.thumbActive {
+  border-color: var(--color-primary, #2563eb);
+}
+
+.titleSection,
+.contentSection {
+  padding: 28px;
+}
+
+.titleRow {
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.titleContent {
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+  line-height: 1.16;
+  letter-spacing: -0.04em;
+  color: var(--color-text-primary, #1e293b);
+}
+
+.metaLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 14px;
+  color: var(--color-text-secondary, #64748b);
+  font-size: 0.9375rem;
+}
+
+.metaLine span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.infoItem {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--color-border-light, #e2e8f0);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-highlight, #f8fafc);
+}
+
+.infoIcon {
+  color: var(--color-primary, #2563eb);
+}
+
+.label,
+.value,
+.subValue {
+  margin: 0;
+}
+
+.label {
+  margin-top: 10px;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary, #64748b);
+  font-weight: 700;
+}
+
+.value {
+  margin-top: 4px;
+  color: var(--color-text-primary, #1e293b);
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.subValue {
+  margin-top: 3px;
+  color: var(--color-text-muted, #94a3b8);
+  font-size: 0.8125rem;
+}
+
+.contentSection {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.contentBlock {
+  min-width: 0;
+}
+
+.subTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary, #1e293b);
+}
+
+.descriptionText {
+  margin: 14px 0 0;
+  color: var(--color-text-secondary, #475569);
+  line-height: 1.82;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.dailyPlanList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.dayCard {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid var(--color-border-light, #e2e8f0);
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    var(--color-surface-highlight, #f8fafc) 100%
+  );
+}
+
+.dayNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: start;
+  min-height: 42px;
+  border-radius: 999px;
+  background: var(--color-accent-light, #dbeafe);
+  color: var(--color-primary, #2563eb);
+  font-weight: 900;
+}
+
+.dayContent {
+  min-width: 0;
+}
+
+.planTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--color-text-primary, #1e293b);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.planDesc {
+  margin: 8px 0 0;
+  color: var(--color-text-secondary, #64748b);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sideColumn > .panel {
+  padding: 20px;
+}
+
+.hostPanel {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.recommendAvatar {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary, #2563eb),
+    var(--color-accent, #0f766e)
+  );
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recommendAvatar svg {
+  font-size: 30px;
+}
+
+.hostText {
+  min-width: 0;
+}
+
+.hostBadge {
+  display: block;
+  color: var(--color-text-muted, #94a3b8);
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+
+.hostName {
+  display: block;
+  margin-top: 4px;
+  color: var(--color-text-primary, #1e293b);
+  font-size: 1.08rem;
+}
+
+.hostMeta,
+.chatLinkNotice,
+.executionNotice {
+  margin: 8px 0 0;
+  color: var(--color-text-secondary, #64748b);
+  line-height: 1.55;
+  font-size: 0.875rem;
+}
+
+.noticePanel {
+  display: flex;
+  gap: 14px;
+}
+
+.noticeIcon {
+  flex: 0 0 auto;
+  color: var(--color-primary, #2563eb);
+}
+
+.noticeTitle {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.summaryList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  color: var(--color-text-secondary, #64748b);
+  font-size: 0.9rem;
+}
+
+.summaryRow strong {
+  color: var(--color-text-primary, #1e293b);
+  text-align: right;
+}
+
+.summaryActions {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.summaryButton {
+  width: 100%;
+}
+
+.summaryApplyMessage {
+  margin: 0;
+  color: var(--color-text-secondary, #64748b);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.hostActionGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+@media screen and (max-width: 1180px) {
+  .page {
+    width: min(100% - 32px, 920px);
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sideColumn {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .infoGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .page {
+    width: min(100% - 24px, 100%);
+    padding-top: 16px;
+  }
+
+  .heroImageWrap {
+    min-height: 220px;
+  }
+
+  .thumbStrip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .titleSection,
+  .contentSection,
+  .sideColumn > .panel {
+    padding: 18px;
+  }
+
+  .titleRow {
+    flex-direction: column;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dayCard {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroBadges {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+  }
+
+  .ddayBadge {
+    margin-left: 0;
+  }
+}
+
+:global(.yarl__toolbar) {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+/* ─── 추천 일정 상세 대표 이미지 모바일 보정 ───────────────────────── */
+
+/* 전체 화면 제목이 모바일에서 과하게 커지지 않도록 기본값부터 살짝 낮춤 */
+.title {
+  font-size: clamp(1.45rem, 3.2vw, 2.15rem);
+  line-height: 1.18;
+  letter-spacing: -0.035em;
+}
+
+/* 768px 이하는 기존 상세보기처럼 이미지 영역을 안정적으로 유지 */
+@media screen and (max-width: 768px) {
+  .heroImageWrap {
+    aspect-ratio: 16 / 9;
+    min-height: 220px;
+  }
+
+  .heroImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .title {
+    font-size: 1.55rem;
+    line-height: 1.22;
+  }
+}
+
+/* 425px 포함 모바일: 이미지 박스 높이를 확보해서 대표 이미지가 너무 얇게 잘리지 않도록 보정 */
+@media screen and (max-width: 480px) {
+  .heroImageWrap {
+    aspect-ratio: auto;
+    height: clamp(238px, 62vw, 280px);
+    min-height: 0;
+  }
+
+  .heroImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  /*
+   * 기존 max-width: 480px 구간에서 ddayBadge의 margin-left가 0으로 풀려 있었기 때문에
+   * 추천 기간 배지가 오른쪽으로 밀리지 않았음. 다시 오른쪽 정렬되도록 복구.
+   */
+  .ddayBadge {
+    margin-left: auto;
+  }
+
+  .heroBadges {
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    gap: 7px;
+    flex-wrap: nowrap;
+  }
+
+  .categoryBadge,
+  .ddayBadge,
+  .statusOpen {
+    min-height: 30px;
+    padding: 0 10px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .imageNav {
+    width: 36px;
+    height: 36px;
+  }
+
+  .prevBtn {
+    left: 12px;
+  }
+
+  .nextBtn {
+    right: 12px;
+  }
+
+  .imageCount {
+    right: 12px;
+    bottom: 12px;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+
+  .title {
+    font-size: 1.38rem;
+    line-height: 1.22;
+    letter-spacing: -0.035em;
+  }
+}
+
+/* 375px 이하: 이미지 높이와 배지 크기를 한 번 더 줄여서 답답함 방지 */
+@media screen and (max-width: 375px) {
+  .heroImageWrap {
+    height: clamp(226px, 64vw, 250px);
+  }
+
+  .heroBadges {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    gap: 6px;
+  }
+
+  .categoryBadge,
+  .ddayBadge,
+  .statusOpen {
+    min-height: 28px;
+    padding: 0 9px;
+    font-size: 0.7rem;
+  }
+
+  .title {
+    font-size: 1.3rem;
+  }
+}
+
+/* 320px 대응: 이미지 영역과 배지/버튼 크기를 초소형 화면에 맞게 보정 */
+@media screen and (max-width: 340px) {
+  .heroImageWrap {
+    height: 218px;
+  }
+
+  .heroBadges {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    gap: 5px;
+  }
+
+  .categoryBadge,
+  .ddayBadge,
+  .statusOpen {
+    min-height: 26px;
+    padding: 0 8px;
+    font-size: 0.66rem;
+  }
+
+  .imageNav {
+    width: 32px;
+    height: 32px;
+  }
+
+  .prevBtn {
+    left: 10px;
+  }
+
+  .nextBtn {
+    right: 10px;
+  }
+
+  .imageCount {
+    right: 10px;
+    bottom: 10px;
+    font-size: 0.7rem;
+  }
+
+  .title {
+    font-size: 1.22rem;
+  }
+}

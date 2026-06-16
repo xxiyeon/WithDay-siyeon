@@ -1,0 +1,63 @@
+.grid {
+  /*
+    모바일 기본값은 2열이다.
+    minmax(0, 1fr)를 사용해 카드 내부 긴 텍스트가 grid column을 밀어내지 않게 한다.
+  */
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0 auto;
+  overflow: visible;
+  align-items: stretch;
+  justify-items: stretch;
+}
+
+.grid > * {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    /* 태블릿에서는 2열을 유지해 container 폭이 줄어도 가로 overflow가 생기지 않게 한다. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1023px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .grid {
+    /* 데스크탑에서는 기존 4열 밀도를 유지하되 고정 min-width는 제거한다. */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .grid {
+    /* 넓은 데스크탑에서는 기존 5열 계약을 유지한다. */
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 22px;
+  }
+}
+
+@media (max-width: 599px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .grid > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+}

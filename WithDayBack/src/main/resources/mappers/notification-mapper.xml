@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.withdayback.notification.dao.NotificationDao">
+    <select id="getNotificationCountById" resultType="int">
+        select count(*)
+        from notification
+        where receiver_id = #{id} and is_read = 0
+    </select>
+
+    <select id="getNotificationsById"
+            parameterType="long"
+            resultType="Notification">
+        select
+            id,
+            receiver_id AS receiverId,
+            target_url AS targetUrl,
+            type,
+            title,
+            message,
+            is_read AS isRead,
+            created_at AS createdAt
+        from notification
+        where receiver_id = #{id}
+        order by created_at desc
+    </select>
+
+    <insert id="insertNotification" parameterType="Notification">
+        insert into notification (
+            receiver_id,
+            target_url,
+            type,
+            title,
+            message,
+            is_read,
+            created_at
+        )
+        values (
+                   #{receiverId},
+                   #{targetUrl},
+                   #{type},
+                   #{title},
+                   #{message},
+                   #{isRead},
+                   NOW()
+               )
+    </insert>
+
+    <update id="readAllNotification">
+        update notification
+        set is_read = 1
+        where receiver_id = #{id}
+    </update>
+
+    <update id="readNotification">
+        update notification
+        set is_read = 1
+        where id = #{notificationId}
+    </update>
+
+    <select id="getNotificationTerm" resultType="int">
+        select agreed
+        from user_terms
+        where user_id = #{id} and terms_id = 4
+    </select>
+
+    <delete id="deleteNotification">
+        delete
+        from notification
+        where id = #{notificationId}
+    </delete>
+
+    <delete id="deleteReadNotifications">
+        delete
+        from notification
+        where receiver_id = #{id} and is_read = 1
+    </delete>
+
+    <delete id="deleteAllNotifications">
+        delete
+        from notification
+        where receiver_id = #{id}
+    </delete>
+</mapper>

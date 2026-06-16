@@ -1,0 +1,231 @@
+.wrapper {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background: var(--color-primary);
+  border-top: 1px solid var(--color-primary-soft);
+  box-shadow: var(--shadow-panel);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.wrapper :global(.MuiBottomNavigation-root) {
+  background: transparent;
+  height: 72px;
+}
+
+.innerNav {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: calc(var(--bottom-nav-height) + 8px) !important;
+  padding: 4px 8px 0;
+  box-sizing: border-box;
+}
+
+.innerNav :global(.MuiBottomNavigationAction-root) {
+  max-width: 100%;
+  min-width: 0;
+  padding: 8px 4px 10px;
+  color: var(--color-text-disabled);
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.innerNav :global(.MuiBottomNavigationAction-label) {
+  margin-top: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.innerNav :global(.MuiBottomNavigationAction-label.Mui-selected) {
+  font-size: 0.68rem;
+}
+
+.navAction {
+  display: inline-flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+}
+
+.navActionActive {
+  color: var(--color-accent-light) !important;
+}
+
+.navIcon {
+  font-size: 1.45rem !important;
+}
+
+.navActionAddSpacer {
+  pointer-events: auto;
+}
+
+.addButtonSpacer {
+  display: inline-flex;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+}
+
+/* 기존 + 버튼 위치에 SpeedDial 버튼을 겹쳐 배치 */
+.addSpeedDial {
+  position: absolute !important;
+  left: 50%;
+  bottom: calc(8px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 5;
+}
+
+/* 펼쳐진 아이콘 간격 */
+.addSpeedDial :global(.MuiSpeedDial-actions) {
+  gap: 10px;
+  padding-bottom: 10px;
+}
+
+/* 기존 addButtonShell과 같은 민트 원형 버튼 */
+.addSpeedDialFab {
+  width: 56px !important;
+  height: 56px !important;
+  min-height: 56px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(
+    180deg,
+    var(--color-accent) 0%,
+    var(--color-accent-dark) 100%
+  ) !important;
+  color: var(--color-text-inverse) !important;
+  box-shadow: none !important;
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast) !important;
+}
+
+/* /write, /recommended 페이지에서도 색이 연해지지 않게 동일 색상 유지 */
+.addSpeedDialFab:hover,
+.addSpeedDialFab:focus,
+.addSpeedDialFab:active {
+  background: linear-gradient(
+    180deg,
+    var(--color-accent) 0%,
+    var(--color-accent-dark) 100%
+  ) !important;
+  color: var(--color-text-inverse) !important;
+  box-shadow: none !important;
+}
+
+.addSpeedDialFab :global(.MuiSvgIcon-root) {
+  font-size: 34px !important;
+  color: var(--color-text-inverse) !important;
+}
+
+.addSpeedDialFab :global(.MuiSpeedDialIcon-root) {
+  height: 34px;
+}
+
+.addSpeedDialFab :global(.MuiSpeedDialIcon-icon),
+.addSpeedDialFab :global(.MuiSpeedDialIcon-openIcon) {
+  color: var(--color-text-inverse) !important;
+}
+
+/* 추천 일정 / 직접 글쓰기 아이콘 버튼 */
+.speedDialActionFab {
+  width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  background: var(--color-surface) !important;
+  color: var(--color-primary) !important;
+  border: 1px solid var(--color-border-light) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.speedDialActionFab:hover {
+  background: var(--color-surface-hover) !important;
+  color: var(--color-accent-dark) !important;
+}
+
+/* SpeedDialAction 제목 */
+/* tooltipOpen을 사용할 때 표시되는 static tooltip 스타일.
+   현재는 hover tooltip 방식을 사용하므로 실제로는 거의 사용되지 않음. */
+.addSpeedDial :global(.MuiSpeedDialAction-staticTooltipLabel) {
+  min-width: max-content;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-sm);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.innerNav :global(.MuiBottomNavigationAction-root:active) {
+  transform: scale(0.95);
+}
+
+@media screen and (min-width: 768px) {
+  .innerNav {
+    max-width: 720px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .innerNav {
+    max-width: 860px;
+  }
+
+  .navAction:hover {
+    color: var(--color-text-inverse) !important;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .innerNav {
+    padding: 4px 4px 0;
+  }
+
+  .innerNav :global(.MuiBottomNavigationAction-root) {
+    padding: 8px 2px 10px;
+  }
+
+  .innerNav :global(.MuiBottomNavigationAction-label),
+  .innerNav :global(.MuiBottomNavigationAction-label.Mui-selected) {
+    font-size: 0.63rem;
+  }
+
+  .navIcon {
+    font-size: 1.35rem !important;
+  }
+
+  .addButtonSpacer {
+    width: 52px;
+    height: 52px;
+  }
+
+  .addSpeedDialFab {
+    width: 52px !important;
+    height: 52px !important;
+    min-height: 52px !important;
+  }
+
+  .addSpeedDialFab :global(.MuiSvgIcon-root) {
+    font-size: 31px !important;
+  }
+
+  .speedDialActionFab {
+    width: 42px !important;
+    height: 42px !important;
+    min-height: 42px !important;
+  }
+}

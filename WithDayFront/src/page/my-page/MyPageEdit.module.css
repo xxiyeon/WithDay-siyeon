@@ -1,0 +1,1057 @@
+.userout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  cursor: pointer;
+  width: fit-content;
+  background-color: var(--color-surface);
+  padding: 0 13px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid rgba(10, 22, 45, 0.22);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px;
+}
+.headerTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+.content {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+}
+/*프로필 이미지 수정 버튼*/
+.retouch_btn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: white;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.retouch_btn svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+.profile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 200px;
+  height: fit-content;
+  min-height: 250px;
+
+  padding: 40px 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+.profileImageMenu {
+  position: absolute;
+  top: 118px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+
+  width: 150px;
+  padding: 6px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid var(--color-border-light);
+  box-shadow: 0 8px 24px rgba(7, 18, 36, 0.14);
+}
+
+.profileImageMenuItem {
+  width: 100%;
+  height: 34px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profileImageMenuItem:hover {
+  background: var(--color-surface-soft);
+}
+.interestList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 35px;
+  justify-content: flex-start;
+}
+
+.interestChip {
+  position: relative;
+  overflow: hidden;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  color: var(--color-text-primary);
+  font-size: 14px;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.interestChip:hover {
+  border: 1.5px solid var(--color-primary);
+}
+
+.interestChipSelected {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+}
+.cropSaveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+/* 빛나는 사선 효과 */
+.interestChip::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -80%;
+  width: 45%;
+  height: 200%;
+
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 35%,
+    rgba(255, 255, 255, 0.75) 50%,
+    rgba(255, 255, 255, 0.15) 65%,
+    transparent 100%
+  );
+
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+
+/* 클릭했을 때만 실행될 클래스 */
+.interestChipSelected.interestChipShine::after {
+  animation: interestShine 0.55s ease;
+}
+
+@keyframes interestShine {
+  0% {
+    left: -80%;
+  }
+
+  100% {
+    left: 130%;
+  }
+}
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+.name {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+.email {
+  color: var(--color-text-primary);
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+
+.formSide {
+  flex: 1;
+  width: 100%;
+}
+.group {
+  margin-bottom: 30px;
+}
+.groupTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 20px;
+  border-top: 1px solid var(--color-border-light);
+  padding-top: 20px;
+  color: var(--color-text-primary);
+}
+.groupTitle span {
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.groupTitle svg {
+  flex-shrink: 0;
+  display: block;
+}
+.inputRow {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  align-items: center;
+  margin-bottom: 15px;
+  width: 100%;
+}
+.avatarEditBox {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-bottom: 15px;
+  overflow: visible;
+}
+.avatarEditBoxCropping {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #071224;
+}
+
+.avatarEditBoxCropping :global(.reactEasyCrop_Container) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.inlineCropControls {
+  width: 160px;
+  margin-top: -4px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.zoomBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.zoomBox span {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.zoomBox input {
+  flex: 1;
+  min-width: 0;
+}
+
+.cropButtons {
+  display: flex;
+  gap: 6px;
+}
+.cropCancelButton,
+.cropSaveButton {
+  flex: 1;
+  height: 34px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.cropCancelButton {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #111827;
+}
+
+.cropSaveButton {
+  border: none;
+  background: #071224;
+  color: #fff;
+}
+.btnCancel,
+.btnSave {
+  height: 38px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btnCancel {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #111827;
+}
+.zoomBox input[type="range"] {
+  flex: 1;
+  min-width: 0;
+
+  -webkit-appearance: none;
+  appearance: none;
+
+  height: 6px;
+  border-radius: 999px;
+  background: #d1d5db;
+  outline: none;
+  cursor: pointer;
+
+  accent-color: var(--color-primary);
+}
+
+/* 크롬, 엣지, 사파리 손잡이 */
+.zoomBox input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+
+  background: var(--color-primary);
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(7, 18, 36, 0.3);
+
+  cursor: pointer;
+}
+
+/* 파이어폭스 손잡이 */
+.zoomBox input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+
+  background: var(--color-primary);
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(7, 18, 36, 0.3);
+
+  cursor: pointer;
+}
+
+/* 파이어폭스 트랙 */
+.zoomBox input[type="range"]::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: #d1d5db;
+}
+.btnSave {
+  border: none;
+  background: #071224;
+  color: #fff;
+}
+.fieldLabel {
+  width: 130px;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  font-size: 15px;
+  white-space: nowrap;
+}
+.inputWrapper {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+.inputWrapper,
+.textareaContainer,
+.addressSearchRow,
+.notiRow {
+  width: 100%;
+  min-width: 0;
+}
+.input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+.input_name {
+  width: 100%;
+  padding: 14px 15px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-sizing: border-box;
+  letter-spacing: 0.5px;
+}
+.input_name,
+.input,
+.textarea {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-text-primary);
+}
+
+.iconEnd {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--color-text-primary);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.messageWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 146px;
+  margin-top: -10px;
+  margin-bottom: 20px;
+  min-height: 18px;
+}
+
+.charCount {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.notiRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  gap: 16px;
+  padding-right: 10px;
+}
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 40px;
+  border-top: 1px solid var(--color-border-light);
+  padding-top: 30px;
+}
+.btn {
+  min-width: 96px;
+  height: 38px;
+  padding: 0 30px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btnSave {
+  background-color: var(--color-primary);
+  color: white;
+}
+.btnCancel {
+  background-color: white;
+  border: 1px solid #ddd;
+}
+
+.pw_text {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-left: auto;
+}
+.notiRow span {
+  flex: 1;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+.errorMsg {
+  font-size: 12px;
+  color: red;
+  font-weight: 500;
+}
+
+.notiRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.notificationSwitch {
+  width: 58px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  background-color: #d1d5db;
+  cursor: pointer;
+  position: relative;
+  padding: 4px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.notificationSwitchOn {
+  background-color: #071224;
+}
+
+.notificationSwitchThumb {
+  width: 24px;
+  height: 24px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.notificationSwitchOn .notificationSwitchThumb {
+  transform: translateX(26px);
+}
+
+.notificationSwitchIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.iconOff {
+  color: #6b7280;
+}
+.iconOn {
+  color: #071224;
+}
+
+/* 스위치 ON */
+.notificationSwitchPing {
+  position: absolute;
+  right: -8px;
+  width: 2px;
+  height: 10px;
+  background-color: #071224;
+  opacity: 0.5;
+  border-radius: 1px;
+}
+/*인사말 수정 구간*/
+.textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  padding-bottom: 30px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  resize: none;
+  font-family: inherit;
+  font-size: 14px;
+}
+/*인사말 영역*/
+.textareaContainer {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+.charCountInside {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  font-size: 12px;
+  color: #a0a0a0;
+  pointer-events: none;
+}
+
+/*주소*/
+.addressSearchRow {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+}
+
+.addressSearchRow input {
+  flex: 1;
+}
+
+.addressSearchButton {
+  width: 100px;
+  height: 45px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.postcodeLayer {
+  margin-left: 146px;
+  margin-bottom: 18px;
+  width: calc(100% - 146px);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #ffffff;
+  box-shadow: 0 8px 24px rgba(7, 18, 36, 0.12);
+}
+
+.postcodeHeader {
+  height: 44px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--color-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.postcodeCloseButton {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.postcodeCloseButton:hover {
+  background-color: var(--color-surface-soft);
+  color: var(--color-text-primary);
+}
+
+/* 회원 정보 수정 페이지 반응형*/
+
+/* 태블릿 이하 */
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+    padding: 28px 20px 100px;
+    box-sizing: border-box;
+  }
+
+  .headerTitle {
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+
+  .content {
+    flex-direction: column;
+    gap: 28px;
+    align-items: stretch;
+  }
+
+  .profile {
+    width: 100%;
+    min-height: auto;
+    padding: 28px 20px;
+    border-radius: 18px;
+  }
+
+  .avatarEditBox,
+  .avatarEditBoxCropping,
+  .avatar {
+    width: 112px;
+    height: 112px;
+  }
+
+  .retouch_btn {
+    width: 32px;
+    height: 32px;
+    right: 0;
+    bottom: 0;
+  }
+
+  .profileImageMenu {
+    top: 108px;
+    width: 160px;
+  }
+
+  .name {
+    font-size: 17px;
+  }
+
+  .email {
+    font-size: 13px;
+    text-align: center;
+    word-break: break-all;
+  }
+
+  .userout {
+    margin-top: 8px;
+  }
+
+  .inlineCropControls {
+    width: 100%;
+    max-width: 240px;
+  }
+
+  .formSide {
+    width: 100%;
+  }
+
+  .group {
+    margin-bottom: 28px;
+  }
+
+  .groupTitle {
+    font-size: 17px;
+    margin-bottom: 16px;
+    padding-top: 18px;
+  }
+
+  .inputRow {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 8px;
+    column-gap: 0;
+    align-items: stretch;
+    margin-bottom: 16px;
+  }
+
+  .fieldLabel {
+    width: 100%;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* 소개글 라벨에 inline style이 들어가 있어서 모바일에서 강제로 정리 */
+  .inputRow .fieldLabel {
+    align-self: auto !important;
+    margin-top: 0 !important;
+  }
+
+  .inputWrapper,
+  .textareaContainer,
+  .addressSearchRow {
+    width: 100%;
+  }
+
+  .input_name,
+  .input,
+  .textarea {
+    width: 100%;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  .input {
+    padding: 14px 44px 14px 14px;
+  }
+
+  .input_name {
+    padding: 14px;
+  }
+
+  .charCount {
+    right: 14px;
+    font-size: 12px;
+  }
+
+  .textarea {
+    min-height: 110px;
+    padding: 14px 14px 32px;
+  }
+
+  .interestList {
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .interestChip {
+    padding: 8px 15px;
+    font-size: 13px;
+  }
+
+  .addressSearchRow {
+    display: flex;
+    gap: 8px;
+  }
+
+  .addressSearchButton {
+    width: 96px;
+    height: 44px;
+    font-size: 12px;
+  }
+
+  .postcodeLayer {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 18px;
+  }
+
+  .postcodeHeader {
+    height: 42px;
+    font-size: 13px;
+  }
+
+  .messageWrapper {
+    margin-left: 0;
+    margin-top: -4px;
+    margin-bottom: 18px;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+  }
+
+  .pw_text {
+    margin-left: 0;
+    line-height: 1.5;
+  }
+
+  .notiRow {
+    width: 100%;
+    padding-right: 0;
+    gap: 12px;
+  }
+
+  .notiRow span {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .footer {
+    margin-top: 34px;
+    padding-top: 24px;
+    gap: 8px;
+  }
+
+  .btn {
+    min-width: 90px;
+    padding: 0 22px;
+  }
+}
+
+/* 모바일 */
+@media (max-width: 480px) {
+  .container {
+    padding: 24px 16px 96px;
+  }
+
+  .headerTitle {
+    font-size: 20px;
+    margin-bottom: 22px;
+  }
+
+  .content {
+    gap: 24px;
+  }
+
+  .profile {
+    padding: 24px 16px;
+    border-radius: 16px;
+  }
+
+  .avatarEditBox,
+  .avatarEditBoxCropping,
+  .avatar {
+    width: 104px;
+    height: 104px;
+  }
+
+  .retouch_btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .retouch_btn svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .profileImageMenu {
+    top: 100px;
+    width: 154px;
+  }
+
+  .profileImageMenuItem {
+    height: 32px;
+    font-size: 11px;
+  }
+
+  .name {
+    font-size: 16px;
+  }
+
+  .email {
+    font-size: 12px;
+  }
+
+  .group {
+    margin-bottom: 26px;
+  }
+
+  .groupTitle {
+    font-size: 16px;
+    gap: 7px;
+    margin-bottom: 14px;
+  }
+
+  .groupTitle svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .fieldLabel {
+    font-size: 13px;
+  }
+
+  .input_name,
+  .input,
+  .textarea {
+    font-size: 13px;
+  }
+
+  .input_name,
+  .input {
+    min-height: 44px;
+  }
+
+  .textarea {
+    min-height: 104px;
+  }
+
+  .interestList {
+    gap: 8px;
+  }
+
+  .interestChip {
+    padding: 7px 13px;
+    font-size: 12px;
+  }
+
+  .addressSearchRow {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .addressSearchButton {
+    width: 100%;
+    height: 42px;
+  }
+
+  .postcodeLayer {
+    border-radius: 10px;
+  }
+
+  .notiRow {
+    align-items: flex-start;
+  }
+
+  .notificationSwitch {
+    width: 54px;
+    height: 30px;
+    padding: 4px;
+  }
+
+  .notificationSwitchThumb {
+    width: 22px;
+    height: 22px;
+  }
+
+  .notificationSwitchOn .notificationSwitchThumb {
+    transform: translateX(24px);
+  }
+
+  .notificationSwitchIcon {
+    width: 13px;
+    height: 13px;
+  }
+
+  .footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 30px;
+  }
+
+  .btn {
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    padding: 0;
+    font-size: 14px;
+  }
+}
+
+/* 아주 작은 모바일 */
+@media (max-width: 360px) {
+  .container {
+    padding: 22px 14px 92px;
+  }
+
+  .profile {
+    padding: 22px 14px;
+  }
+
+  .avatarEditBox,
+  .avatarEditBoxCropping,
+  .avatar {
+    width: 96px;
+    height: 96px;
+  }
+
+  .retouch_btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .profileImageMenu {
+    top: 94px;
+  }
+
+  .interestChip {
+    padding: 7px 11px;
+    font-size: 12px;
+  }
+
+  .notiRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .notificationSwitch {
+    align-self: flex-end;
+  }
+}

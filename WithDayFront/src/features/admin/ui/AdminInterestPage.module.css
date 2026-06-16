@@ -1,0 +1,632 @@
+.page {
+  width: 100%;
+  min-height: 100%;
+  padding: 32px 24px 80px;
+  box-sizing: border-box;
+}
+
+/* ===== Page Header ===== */
+.pageHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--color-primary);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.pageHeader h1 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.pageHeader p {
+  max-width: 620px;
+  margin: 10px 0 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.countBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ===== Layout ===== */
+.interestLayout {
+  display: grid;
+  grid-template-columns: 380px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+/* ===== Card ===== */
+.card,
+.formCard {
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid #e5edf3;
+  border-radius: 22px;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+}
+
+.card {
+  padding: 24px;
+}
+
+.formCard {
+  padding: 24px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.cardHeader h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.cardHeader p {
+  margin: 8px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ===== Form ===== */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  color: #111827;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.formGroup input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #d9e2ec;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.formGroup input::placeholder {
+  color: #94a3b8;
+}
+
+.formGroup input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(10, 22, 45, 0.08);
+}
+
+.helperText {
+  display: block;
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ===== Icon Preview ===== */
+.iconPreviewBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 10px 12px;
+  border: 1px solid #e5edf3;
+  border-radius: 16px;
+  background: #f8fafc;
+  box-sizing: border-box;
+}
+
+.iconPreviewChip {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border: 1px solid #d9e2ec;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.iconPreviewChip span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.iconCode {
+  flex-shrink: 0;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ===== Icon Grid ===== */
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 4px;
+  border-radius: 14px;
+}
+
+.iconGrid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.iconGrid::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(141, 141, 141, 0.35);
+}
+
+.iconGrid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.iconOption {
+  min-width: 0;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #e5edf3;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+
+  font-size: 13px;
+  font-weight: 800;
+  text-align: left;
+}
+
+.iconOption:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.iconOptionSelected {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.iconOption span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== Form Actions ===== */
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+/* 공통 Button 컴포넌트가 들어와도 모바일에서 깨지지 않게 처리 */
+.formActions button {
+  white-space: nowrap;
+}
+
+/* ===== State ===== */
+.stateBox {
+  min-height: 120px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+}
+
+/* ===== Interest List ===== */
+.interestList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.interestItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding: 16px;
+  border: 1px solid #e5edf3;
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.interestItem:hover {
+  border-color: #d9e2ec;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+.interestInfo {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.interestIconBox {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--color-bg);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent-dark);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.interestText {
+  min-width: 0;
+}
+
+.interestText strong {
+  display: block;
+  color: var(--color-primary);
+  font-size: 15px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.interestText span {
+  display: block;
+  margin-top: 5px;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.itemActions button {
+  white-space: nowrap;
+}
+
+.deleteButton {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #fecdd3;
+  border-radius: 10px;
+  background: #fff1f2;
+  color: #e11d48;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deleteButton:hover {
+  background: #ffe4e6;
+}
+
+.deleteButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== Tablet ===== */
+@media (max-width: 1200px) {
+  .interestLayout {
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .page {
+    padding: 84px 16px 80px;
+  }
+
+  .interestLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .formCard {
+    order: 1;
+  }
+
+  .card {
+    order: 2;
+  }
+
+  .iconGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-height: 220px;
+  }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 640px) {
+  .page {
+    padding: 76px 12px 72px;
+  }
+
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .eyebrow {
+    margin-bottom: 6px;
+    font-size: 11px;
+  }
+
+  .pageHeader h1 {
+    font-size: 24px;
+    line-height: 1.25;
+    letter-spacing: -0.035em;
+  }
+
+  .pageHeader p {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .countBadge {
+    min-height: 30px;
+    padding: 0 11px;
+    font-size: 12px;
+  }
+
+  .interestLayout {
+    gap: 14px;
+  }
+
+  .card,
+  .formCard {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .cardHeader {
+    margin-bottom: 18px;
+  }
+
+  .cardHeader h2 {
+    font-size: 18px;
+  }
+
+  .cardHeader p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .formGroup {
+    margin-bottom: 18px;
+  }
+
+  .formGroup label {
+    font-size: 13px;
+  }
+
+  .formGroup input {
+    height: 46px;
+    border-radius: 12px;
+    font-size: 13px;
+  }
+
+  .iconPreviewBox {
+    min-height: auto;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .iconPreviewChip {
+    max-width: 100%;
+    justify-content: center;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .iconCode {
+    align-self: center;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .iconGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-height: 220px;
+    gap: 8px;
+    padding: 2px;
+  }
+
+  .iconOption {
+    height: 40px;
+    padding: 0 10px;
+    border-radius: 11px;
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .helperText {
+    font-size: 11px;
+  }
+
+  .formActions {
+    margin-top: 18px;
+  }
+
+  .formActions button {
+    width: 100%;
+    min-height: 42px;
+  }
+
+  .interestItem {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .interestInfo {
+    align-items: center;
+  }
+
+  .interestIconBox {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+
+  .interestText strong {
+    font-size: 14px;
+  }
+
+  .interestText span {
+    font-size: 11px;
+  }
+
+  .itemActions {
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .itemActions button:not(.deleteButton) {
+    flex: 1;
+    min-height: 38px;
+  }
+
+  .deleteButton {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+  }
+
+  .stateBox {
+    min-height: 100px;
+    padding: 20px;
+    font-size: 13px;
+  }
+}
+
+/* ===== Small Mobile ===== */
+@media (max-width: 420px) {
+  .page {
+    padding: 72px 10px 68px;
+  }
+
+  .pageHeader h1 {
+    font-size: 22px;
+  }
+
+  .card,
+  .formCard {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .iconPreviewBox {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .iconPreviewChip {
+    justify-content: flex-start;
+  }
+
+  .iconCode {
+    align-self: flex-start;
+    font-size: 11px;
+  }
+
+  .iconGrid {
+    grid-template-columns: 1fr;
+    max-height: 240px;
+  }
+
+  .iconOption {
+    width: 100%;
+  }
+
+  .itemActions {
+    gap: 6px;
+  }
+
+  .deleteButton {
+    width: 38px;
+  }
+}

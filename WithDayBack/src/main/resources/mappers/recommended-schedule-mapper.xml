@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.withdayback.recommended.dao.RecommendedScheduleDao">
+
+    <!-- 추천 일정 목록 조회 -->
+    <!-- 삭제되지 않았고 노출 상태인 추천 일정만 최신순으로 가져옴 -->
+    <select id="getRecommendedScheduleList" resultType="RecommendedSchedule">
+        SELECT
+            id,
+            admin_id AS adminId,
+            title,
+            description,
+            category,
+            region,
+            detail_region AS detailRegion,
+            duration_days AS durationDays,
+            min_participants AS minParticipants,
+            max_participants AS maxParticipants,
+            gender_limit AS genderLimit,
+            age_min AS ageMin,
+            age_max AS ageMax,
+            total_price AS totalPrice,
+            cost_type AS costType,
+            thumbnail_image AS thumbnailImage,
+            is_active AS isActive,
+            created_at AS createdAt,
+            updated_at AS updatedAt,
+            deleted_at AS deletedAt
+        FROM recommended_schedule
+        WHERE deleted_at IS NULL
+          AND is_active = 1
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 추천 일정 상세 조회 -->
+    <select id="getRecommendedScheduleById" parameterType="Long" resultType="RecommendedSchedule">
+        SELECT
+            id,
+            admin_id AS adminId,
+            title,
+            description,
+            category,
+            region,
+            detail_region AS detailRegion,
+            duration_days AS durationDays,
+            min_participants AS minParticipants,
+            max_participants AS maxParticipants,
+            gender_limit AS genderLimit,
+            age_min AS ageMin,
+            age_max AS ageMax,
+            total_price AS totalPrice,
+            cost_type AS costType,
+            thumbnail_image AS thumbnailImage,
+            is_active AS isActive,
+            created_at AS createdAt,
+            updated_at AS updatedAt,
+            deleted_at AS deletedAt
+        FROM recommended_schedule
+        WHERE id = #{id}
+          AND deleted_at IS NULL
+          AND is_active = 1
+    </select>
+
+    <!-- 추천 일정 상세 일정 조회 -->
+    <select id="getRecommendedScheduleDetailList" parameterType="Long" resultType="RecommendedScheduleDetail">
+        SELECT
+            id,
+            recommended_schedule_id AS recommendedScheduleId,
+            day_number AS dayNumber,
+            sort_order AS sortOrder,
+            title,
+            description,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+        FROM recommended_schedule_detail
+        WHERE recommended_schedule_id = #{recommendedScheduleId}
+        ORDER BY day_number ASC, sort_order ASC
+    </select>
+
+    <!-- 추천 일정 이미지 조회 -->
+    <select id="getRecommendedScheduleImageList" parameterType="Long" resultType="RecommendedScheduleImage">
+        SELECT
+            id,
+            recommended_schedule_id AS recommendedScheduleId,
+            image_url AS imageUrl,
+            is_thumbnail AS isThumbnail,
+            created_at AS createdAt
+        FROM recommended_schedule_image
+        WHERE recommended_schedule_id = #{recommendedScheduleId}
+        ORDER BY is_thumbnail DESC, id ASC
+    </select>
+
+    <!-- 추천 일정 기본 정보 저장 -->
+    <insert id="insertRecommendedSchedule" parameterType="RecommendedSchedule" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO recommended_schedule (
+            admin_id,
+            title,
+            description,
+            category,
+            region,
+            detail_region,
+            duration_days,
+            min_participants,
+            max_participants,
+            gender_limit,
+            age_min,
+            age_max,
+            total_price,
+            cost_type,
+            thumbnail_image,
+            is_active
+        ) VALUES (
+                     #{adminId},
+                     #{title},
+                     #{description},
+                     #{category},
+                     #{region},
+                     #{detailRegion},
+                     #{durationDays},
+                     #{minParticipants},
+                     #{maxParticipants},
+                     #{genderLimit},
+                     #{ageMin},
+                     #{ageMax},
+                     #{totalPrice},
+                     #{costType},
+                     #{thumbnailImage},
+                     1
+                 )
+    </insert>
+
+    <!-- 추천 일정 상세 일정 저장 -->
+    <insert id="insertRecommendedScheduleDetail" parameterType="RecommendedScheduleDetail">
+        INSERT INTO recommended_schedule_detail (
+            recommended_schedule_id,
+            day_number,
+            sort_order,
+            title,
+            description
+        ) VALUES (
+                     #{recommendedScheduleId},
+                     #{dayNumber},
+                     #{sortOrder},
+                     #{title},
+                     #{description}
+                 )
+    </insert>
+
+    <!-- 추천 일정 이미지 저장 -->
+    <insert id="insertRecommendedScheduleImage" parameterType="RecommendedScheduleImage">
+        INSERT INTO recommended_schedule_image (
+            recommended_schedule_id,
+            image_url,
+            is_thumbnail
+        ) VALUES (
+                     #{recommendedScheduleId},
+                     #{imageUrl},
+                     #{isThumbnail}
+                 )
+    </insert>
+
+    <!-- 추천 일정 이미지 삭제 -->
+    <!-- 추천 일정 기본 정보를 삭제하기 전 연결된 이미지 데이터를 먼저 삭제함 -->
+    <delete id="deleteRecommendedScheduleImages" parameterType="Long">
+        DELETE FROM recommended_schedule_image
+        WHERE recommended_schedule_id = #{recommendedScheduleId}
+    </delete>
+
+    <!-- 추천 일정 상세 일정 삭제 -->
+    <!-- 추천 일정 기본 정보를 삭제하기 전 연결된 상세 일정 데이터를 먼저 삭제함 -->
+    <delete id="deleteRecommendedScheduleDetails" parameterType="Long">
+        DELETE FROM recommended_schedule_detail
+        WHERE recommended_schedule_id = #{recommendedScheduleId}
+    </delete>
+
+    <!-- 추천 일정 기본 정보 삭제 -->
+    <!-- 현재 프로젝트의 기존 일정 삭제 흐름에 맞춰 hard delete로 처리함 -->
+    <delete id="deleteRecommendedSchedule" parameterType="Long">
+        DELETE FROM recommended_schedule
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 추천 일정 기본 정보 수정 -->
+    <!-- 이미지가 새로 업로드된 경우에만 thumbnail_image를 함께 수정함 -->
+    <update id="updateRecommendedSchedule" parameterType="RecommendedSchedule">
+        UPDATE recommended_schedule
+        <set>
+            title = #{title},
+            description = #{description},
+            category = #{category},
+            region = #{region},
+            detail_region = #{detailRegion},
+            duration_days = #{durationDays},
+            min_participants = #{minParticipants},
+            max_participants = #{maxParticipants},
+            gender_limit = #{genderLimit},
+            age_min = #{ageMin},
+            age_max = #{ageMax},
+            total_price = #{totalPrice},
+            cost_type = #{costType},
+            is_active = #{isActive},
+            <if test="thumbnailImage != null">
+                thumbnail_image = #{thumbnailImage},
+            </if>
+            updated_at = CURRENT_TIMESTAMP
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 추천 일정 이미지 단건 삭제 -->
+    <delete id="deleteRecommendedScheduleImageById" parameterType="Long">
+        DELETE FROM recommended_schedule_image
+        WHERE id = #{imageId}
+    </delete>
+
+    <!-- 추천 일정 썸네일 URL 수정 -->
+    <!-- thumbnailImage가 null이면 추천 일정 기본 테이블의 썸네일도 null로 변경됨 -->
+    <update id="updateRecommendedScheduleThumbnail">
+        UPDATE recommended_schedule
+        SET thumbnail_image = #{thumbnailImage},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{recommendedScheduleId}
+    </update>
+
+</mapper>

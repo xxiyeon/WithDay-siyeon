@@ -1,0 +1,720 @@
+/* ─── 레이아웃 ─────────────────────────────────────────────── */
+.main {
+  padding: 0;
+  background-color: var(--color-bg);
+  min-width: 0;
+}
+
+/* ─── 배너 ─────────────────────────────────────────────────── */
+.banner {
+  margin: 20px 0;
+  padding: 10px 0;
+}
+
+.bannerTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.highlight {
+  color: var(--color-primary);
+}
+
+/* ─── 통합 필터 패널 ───────────────────────────────────────── */
+.filterPanel {
+  margin-bottom: 28px;
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+  min-width: 0;
+}
+
+.searchRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.searchInputWrapper {
+  min-width: 0;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0 14px;
+  background: #ffffff;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.searchInputWrapper:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.searchIcon {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+.searchInput {
+  min-width: 0;
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.searchInput::placeholder {
+  color: var(--color-text-muted);
+}
+
+.searchButton {
+  min-width: 92px;
+  min-height: 46px;
+  padding: 0 20px;
+}
+
+.filterBar {
+  display: grid;
+  grid-template-columns:
+    minmax(112px, 0.9fr)
+    minmax(130px, 1fr)
+    minmax(130px, 1fr)
+    minmax(112px, 0.9fr)
+    minmax(170px, 1.2fr)
+    minmax(260px, 1.5fr);
+  gap: 10px;
+  align-items: end;
+  margin-top: 14px;
+}
+
+.filterField {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filterLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+}
+
+.muiFormControl {
+  width: 100%;
+}
+
+.muiSelect :global(.MuiOutlinedInput-root),
+.dateInput {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  padding: 0 12px;
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.muiSelect :global(.MuiOutlinedInput-root) {
+  padding: 0;
+}
+
+.muiSelect
+  :global(.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline) {
+  border-color: var(--color-border);
+}
+
+.muiSelect :global(.MuiOutlinedInput-notchedOutline) {
+  border-color: var(--color-border);
+  border-width: 1px;
+}
+
+.muiSelect :global(.MuiSelect-select),
+.muiSelect
+  :global(
+    .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input
+  ) {
+  min-width: 0;
+  padding: 10px 40px 10px 12px;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+}
+
+.muiSelect :global(.MuiSelect-icon) {
+  color: var(--color-text-muted);
+}
+
+.muiSelect :global(.Mui-disabled) {
+  background: rgba(241, 245, 249, 0.7);
+  color: var(--color-text-muted);
+}
+
+.muiSelect :global(.Mui-disabled .MuiSelect-icon) {
+  color: var(--color-text-muted);
+}
+
+.muiSelect :global(.Mui-focused) {
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.muiSelect :global(.Mui-focused .MuiOutlinedInput-notchedOutline) {
+  border-color: var(--color-primary);
+}
+
+.dateInput:focus {
+  box-shadow: none;
+}
+
+.dateRangeField {
+  min-width: 260px;
+  align-items: flex-start;
+}
+
+.dateRangeInputs {
+  display: grid;
+  grid-template-columns: fit-content(10ch) auto fit-content(10ch);
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+  gap: 8px;
+  align-items: center;
+  justify-content: start;
+  align-self: flex-start;
+  min-height: 46px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0 12px;
+  background: #ffffff;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.dateRangeInputs:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.dateRangeInputs .dateInput {
+  min-height: auto;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.dateValueSlot {
+  position: relative;
+  min-width: 7.5ch;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dateValueText {
+  min-width: 0;
+  width: auto;
+  max-width: 10ch;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.datePlaceholder {
+  color: var(--color-text-muted);
+}
+
+.dateInputOverlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.dateDivider {
+  color: var(--color-text-muted);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.selectedFilterRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.selectedChipList {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.selectedChip {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 10px 0 12px;
+  border: 1px solid rgba(30, 58, 138, 0.18);
+  border-radius: 999px;
+  background: rgba(30, 58, 138, 0.07);
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.selectedChip:hover {
+  border-color: rgba(30, 58, 138, 0.36);
+  background: rgba(30, 58, 138, 0.12);
+}
+
+.resetButton {
+  flex-shrink: 0;
+}
+
+/* ─── 섹션 공통 ─────────────────────────────────────────────── */
+.section {
+  margin-bottom: 28px;
+  overflow: visible;
+  min-width: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 46px auto 16px;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* ─── 상태 박스 (로딩 / 에러) ──────────────────────────────── */
+.stateBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.errorBox {
+  color: var(--color-error);
+}
+
+.loadingSpinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.noData {
+  padding: 40px 0;
+  text-align: center;
+  width: 100%;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1180px) {
+  .filterBar {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .dateRangeField {
+    min-width: 0;
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 767px) {
+  .main {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .banner {
+    margin: 14px 0;
+  }
+
+  .bannerTitle {
+    font-size: 1.3rem;
+  }
+
+  .filterPanel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 14px;
+    border-radius: var(--radius-md);
+    overflow: visible;
+    box-sizing: border-box;
+  }
+
+  .searchRow {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .searchInputWrapper {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    box-sizing: border-box;
+  }
+
+  .searchInput {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .searchButton {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+  }
+
+  .filterBar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+    margin-top: 14px;
+    padding: 0;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .filterField {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    scroll-snap-align: unset;
+  }
+
+  .muiFormControl,
+  .muiSelect,
+  .muiSelect :global(.MuiInputBase-root) {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .muiSelect :global(.MuiSelect-select),
+  .muiSelect
+    :global(
+      .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input
+    ) {
+    min-width: 0;
+    padding: 9px 34px 9px 10px;
+    font-size: 0.82rem;
+  }
+
+  .dateRangeField {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dateRangeInputs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    gap: 6px;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+
+  .dateValueSlot {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dateValueText {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.82rem;
+  }
+
+  .dateDivider {
+    font-size: 0.82rem;
+  }
+
+  .selectedFilterRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .selectedChipList {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .resetButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 375px) {
+  .filterPanel {
+    padding: 12px;
+  }
+
+  .filterBar {
+    gap: 8px;
+  }
+
+  .filterLabel {
+    font-size: 0.72rem;
+  }
+
+  .searchInputWrapper {
+    min-height: 42px;
+    padding: 0 10px;
+  }
+
+  .searchInput {
+    font-size: 0.84rem;
+  }
+
+  .searchInput::placeholder {
+    font-size: 0.82rem;
+  }
+
+  .searchButton {
+    min-height: 40px;
+  }
+
+  .dateRangeInputs {
+    min-height: 40px;
+    padding: 0 9px;
+    gap: 5px;
+  }
+
+  .dateValueText {
+    font-size: 0.8rem;
+  }
+
+  .muiSelect :global(.MuiSelect-select),
+  .muiSelect
+    :global(
+      .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input
+    ) {
+    font-size: 0.8rem;
+    padding: 9px 32px 9px 9px;
+  }
+}
+
+@media (max-width: 340px) {
+  .filterPanel {
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  .filterBar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .bannerTitle {
+    font-size: 1.08rem;
+  }
+
+  .searchInputWrapper {
+    min-height: 40px;
+    padding: 0 9px;
+    gap: 6px;
+  }
+
+  .searchIcon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .searchInput {
+    font-size: 0.8rem;
+  }
+
+  .searchInput::placeholder {
+    font-size: 0.76rem;
+  }
+
+  .searchButton {
+    min-height: 39px;
+    font-size: 0.82rem;
+  }
+
+  .filterLabel {
+    font-size: 0.7rem;
+  }
+
+  .muiSelect :global(.MuiSelect-select),
+  .muiSelect
+    :global(
+      .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input
+    ) {
+    font-size: 0.76rem;
+    padding: 8px 30px 8px 8px;
+  }
+
+  .dateRangeInputs {
+    padding: 0 8px;
+    gap: 4px;
+  }
+
+  .dateValueText {
+    font-size: 0.76rem;
+  }
+
+  .dateDivider {
+    font-size: 0.76rem;
+  }
+}
+
+/* ─── 탐색 카드 그리드: 홈 티켓 카드 크기 유지 ─────────────── */
+.exploreCardGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 220px);
+  justify-content: center;
+  align-items: start;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+  padding-bottom: 8px;
+}
+
+/* 카드 자체는 홈 카드 크기를 유지하고, 그리드 안에서만 가운데 정렬 */
+.exploreCardGrid :global(.exploreTicketCard) {
+  justify-self: center;
+}
+
+/* 작은 모바일 */
+@media (max-width: 360px) {
+  .exploreCardGrid {
+    grid-template-columns: repeat(1, 204px);
+    gap: 14px;
+  }
+}
+
+/* 640px 이상: 한 줄에 2개 */
+@media (min-width: 640px) {
+  .exploreCardGrid {
+    grid-template-columns: repeat(2, 222px);
+    gap: 16px 18px;
+  }
+}
+
+/* 768px 이상: 한 줄에 3개 */
+@media (min-width: 768px) {
+  .exploreCardGrid {
+    grid-template-columns: repeat(3, 222px);
+    gap: 18px 18px;
+  }
+}
+
+/* 769px 이상부터 ScheduleCard 쪽 카드가 230px로 바뀜 */
+@media (min-width: 769px) {
+  .exploreCardGrid {
+    grid-template-columns: repeat(3, 230px);
+    gap: 20px 20px;
+  }
+}
+
+/* 1024px 이상: 한 줄에 4개 */
+@media (min-width: 1024px) {
+  .exploreCardGrid {
+    grid-template-columns: repeat(4, 230px);
+    gap: 20px 20px;
+  }
+}
+
+/* 1025px 이상부터 기본 홈 카드 240px 기준 */
+@media (min-width: 1025px) {
+  .exploreCardGrid {
+    grid-template-columns: repeat(4, 240px);
+    gap: 22px 22px;
+  }
+}
+
+/* 1440px 이상: 한 줄에 5개 */
+@media (min-width: 1440px) {
+  .exploreCardGrid {
+    grid-template-columns: repeat(5, 240px);
+    gap: 24px 24px;
+  }
+}
+
+/* 2560px 이상: 한 줄에 6개 */
+@media (min-width: 2560px) {
+  .exploreCardGrid {
+    grid-template-columns: repeat(6, 240px);
+    gap: 26px 28px;
+  }
+}

@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.withdayback.schedule.dao.ScheduleDao">
+    <!--
+        일정 상세 조회에서 작성자 email을 찾는다.
+        Service는 이 email과 viewerEmail을 비교해 현재 사용자가 호스트인지 계산한다.
+    -->
+    <select id="getEmailByScheduleId" resultType="String">
+        select email
+        from `user`
+        where id = (select user_id from schedule where id = #{id})
+          and status in ('active', 'admin')
+    </select>
+
+    <!--
+        일정 상세의 기본 schedule row를 조회한다.
+        SELECT * 대신 화면과 DTO에 필요한 컬럼을 명시적으로 alias 처리해 Java VO 필드명과 DB 컬럼명의 차이를 분명하게 맞춘다.
+        deleted_at IS NULL 조건으로 삭제된 일정은 상세에서 조회되지 않게 한다.
+    -->
+    <select id="selectScheduleById" resultType="Schedule">
+        SELECT id,
+               user_id              AS userId,
+               title,
+               description,
+               category,
+               region,
+               detail_region        AS detailRegion,
+               chat_link            AS chatLink,
+               start_date           AS startDate,
+               end_date             AS endDate,
+               recruit_start_date   AS recruitStartDate,
+               recruit_end_date     AS recruitEndDate,
+               min_participants     AS minParticipants,
+               max_participants     AS maxParticipants,
+               current_participants AS currentParticipants,
+               age_min              AS ageMin,
+               age_max              AS ageMax,
+               gender_limit         AS genderLimit,
+               total_price          AS totalPrice,
+               cost_type            AS costType,
+               thumbnail_image      AS thumbnailImage,
+               view_count           AS viewCount,
+               status,
+               is_public            AS isPublic,
+               cancel_deadline      AS cancelDeadline,
+               created_at           AS createdAt,
+               updated_at           AS updatedAt,
+               deleted_at           AS deletedAt
+        FROM schedule
+        WHERE id = #{id}
+          AND deleted_at IS NULL
+    </select>
+
+    <!--
+        상세 페이지는 단순 schedule row 외에 "현재 viewer가 이 일정을 저장했는가"도 함께 알아야 한다.
+        별도 북마크 API를 한 번 더 부르면 상세 진입 시 추가 round-trip이 생기므로,
+        게스트/로그인 모두 같은 상세 select에서 EXISTS 컬럼으로 해결한다.
+    -->
+    <select id="selectScheduleByIdForViewer" resultType="Schedule">
+        SELECT s.id,
+               s.user_id              AS userId,
+               s.title,
+               s.description,
+               s.category,
+               s.region,
+               s.detail_region        AS detailRegion,
+               s.chat_link            AS chatLink,
+               s.start_date           AS startDate,
+               s.end_date             AS endDate,
+               s.recruit_start_date   AS recruitStartDate,
+               s.recruit_end_date     AS recruitEndDate,
+               s.min_participants     AS minParticipants,
+               s.max_participants     AS maxParticipants,
+               s.current_participants AS currentParticipants,
+               s.age_min              AS ageMin,
+               s.age_max              AS ageMax,
+               s.gender_limit         AS genderLimit,
+               s.total_price          AS totalPrice,
+               s.cost_type            AS costType,
+               s.thumbnail_image      AS thumbnailImage,
+               s.view_count           AS viewCount,
+               s.status,
+               s.is_public            AS isPublic,
+               s.cancel_deadline      AS cancelDeadline,
+               s.created_at           AS createdAt,
+               s.updated_at           AS updatedAt,
+               s.deleted_at           AS deletedAt,
+               CASE
+                   WHEN #{email} IS NULL OR TRIM(#{email}) = '' THEN FALSE
+                   ELSE EXISTS(
+                       SELECT 1
+                       FROM bookmark b
+                       INNER JOIN `user` u
+                               ON u.id = b.user_id
+                       WHERE b.schedule_id = s.id
+                         AND u.email = #{email}
+                   )
+               END AS isBookmarked
+        FROM schedule s
+        WHERE s.id = #{id}
+          AND s.deleted_at IS NULL
+    </select>
+
+    <!--
+        상세 페이지의 세부 일정(Day-by-Day)을 조회한다.
+        day_number ASC 정렬을 SQL에서 보장해 프론트가 별도 정렬 없이 순서대로 렌더링할 수 있게 한다.
+    -->
+    <select id="selectDetailsByScheduleId" resultType="ScheduleDetail">
+        SELECT *
+        FROM schedule_detail
+        WHERE schedule_id = #{scheduleId}
+        ORDER BY day_number ASC
+    </select>
+
+    <!--
+        상세 페이지 이미지 슬라이더에 사용할 이미지 목록이다.
+        id ASC는 업로드/저장 순서를 유지하기 위한 정렬이며, 첫 번째 이미지는 썸네일 fallback 후보로도 쓰인다.
+    -->
+    <select id="selectImageByScheduleId" resultType="ScheduleImage">
+        SELECT *
+        FROM schedule_image
+        WHERE schedule_id = #{scheduleId}
+        ORDER BY id asc
+    </select>
+
+    <update id="increaseViewCount">
+        UPDATE schedule
+        SET view_count = view_count + 1
+        WHERE id = #{scheduleId}
+          AND deleted_at IS NULL
+    </update>
+
+    <update id="increaseCurrentParticipants">
+        UPDATE schedule
+        SET current_participants = current_participants + 1
+        WHERE id = #{scheduleId}
+          AND deleted_at IS NULL
+          AND current_participants &lt; max_participants
+    </update>
+
+    <update id="decreaseCurrentParticipants">
+        UPDATE schedule
+        SET current_participants = CASE
+                                       WHEN current_participants > 0 THEN current_participants - 1
+                                       ELSE 0
+            END
+        WHERE id = #{scheduleId}
+          AND deleted_at IS NULL
+          AND current_participants > 0
+    </update>
+
+    <update id="closeScheduleWhenFull">
+        UPDATE schedule
+        SET status = 'closed',
+            updated_at = NOW()
+        WHERE id = #{scheduleId}
+          AND deleted_at IS NULL
+          AND status = 'recruiting'
+          AND current_participants >= max_participants
+    </update>
+
+    <update id="reopenScheduleWhenSlotAvailable">
+        UPDATE schedule
+        SET status = 'recruiting',
+            updated_at = NOW()
+        WHERE id = #{scheduleId}
+          AND deleted_at IS NULL
+          AND status = 'closed'
+          AND current_participants &lt; max_participants
+          AND (recruit_end_date IS NULL OR recruit_end_date >= CURDATE())
+          AND (end_date IS NULL OR end_date >= CURDATE())
+    </update>
+
+    <update id="completeSchedule">
+        UPDATE schedule
+        SET status = 'completed',
+            updated_at = NOW()
+        WHERE id = #{scheduleId}
+          AND deleted_at IS NULL
+          AND status = #{currentStatus}
+    </update>
+
+    <update id="rollbackCompletedSchedule">
+        UPDATE schedule
+        SET status = #{targetStatus},
+            updated_at = NOW()
+        WHERE id = #{scheduleId}
+          AND deleted_at IS NULL
+          AND status = 'completed'
+    </update>
+
+    <update id="cancelSchedule">
+        UPDATE schedule
+        SET status = 'canceled',
+            updated_at = NOW()
+        WHERE id = #{scheduleId}
+          AND deleted_at IS NULL
+          AND status IN ('recruiting', 'closed')
+    </update>
+
+    <update id="closeExpiredSchedules">
+        UPDATE schedule
+        SET status = 'closed',
+        updated_at = NOW()
+        WHERE status = 'recruiting'
+        AND recruit_end_date &lt; CURDATE()
+        AND deleted_at IS NULL
+    </update>
+
+    <!-- 홈/탐색 탭 일정 리스트 조회 -->
+    <select id="getAllSchedules" resultType="Schedule">
+        SELECT
+        s.*,
+        CASE
+            WHEN #{email} IS NULL OR TRIM(#{email}) = '' THEN FALSE
+            ELSE EXISTS(
+                SELECT 1
+                FROM bookmark b
+                INNER JOIN `user` u
+                        ON u.id = b.user_id
+                WHERE b.schedule_id = s.id
+                  AND u.email = #{email}
+            )
+        END AS isBookmarked
+        FROM schedule s
+        <where>
+            s.deleted_at IS NULL
+            <if test="!viewerIsAdmin">
+                AND (
+                    s.is_public IS NULL
+                    OR s.is_public != 0
+                    <if test="viewerUserId != null">
+                        OR s.user_id = #{viewerUserId}
+                    </if>
+                )
+            </if>
+            AND (
+                s.status = 'recruiting'
+                OR (
+                    s.status = 'closed'
+                    AND s.current_participants >= s.max_participants
+                    AND (s.recruit_end_date IS NULL OR s.recruit_end_date >= CURDATE())
+                )
+            )
+
+            <!-- 탐색 탭에서 "전체"가 아닌 카테고리를 선택했을 때만 적용된다. -->
+            <if test="category != null and category != ''">
+                AND s.category = #{category}
+            </if>
+
+            <!-- 검색어는 탐색 화면의 일정명/내용 검색만 담당한다. -->
+            <if test="keyword != null and keyword != ''">
+                AND (
+                UPPER(s.title) LIKE CONCAT('%', UPPER(#{keyword}), '%')
+                OR UPPER(s.description) LIKE CONCAT('%', UPPER(#{keyword}), '%')
+                )
+            </if>
+
+            <!-- 시/도 필터는 공백/대소문자 차이를 줄이기 위해 TRIM + UPPER로 비교한다. -->
+            <if test="region != null and region != ''">
+                AND UPPER(TRIM(s.region)) = UPPER(TRIM(#{region}))
+            </if>
+
+            <!-- 시/군/구를 선택하면 같은 시/도 안에서도 상세 지역까지 좁힌다. -->
+            <if test="district != null and district != ''">
+                AND UPPER(TRIM(s.detail_region)) = UPPER(TRIM(#{district}))
+            </if>
+
+            <!-- gender_limit은 all/male/female enum 문자열을 그대로 저장하므로 단순 일치로 충분하다. -->
+            <if test="genderLimit != null and genderLimit != ''">
+                AND s.gender_limit = #{genderLimit}
+            </if>
+
+            <!-- 기간 필터는 일정 기간과 선택 기간이 겹치면 결과에 포함한다. -->
+            <if test="startDate != null and startDate != ''">
+                AND (s.end_date IS NULL OR s.end_date &gt;= #{startDate})
+            </if>
+
+            <if test="endDate != null and endDate != ''">
+                AND (s.start_date IS NULL OR s.start_date &lt;= #{endDate})
+            </if>
+        </where>
+        <choose>
+            <when test="sort == 'deadlineSoon'">
+                ORDER BY CASE WHEN s.recruit_end_date IS NULL THEN 1 ELSE 0 END,
+                         s.recruit_end_date ASC,
+                         s.id DESC
+            </when>
+            <when test="sort == 'deadlineRelaxed'">
+                ORDER BY CASE WHEN s.recruit_end_date IS NULL THEN 1 ELSE 0 END,
+                         s.recruit_end_date DESC,
+                         s.id DESC
+            </when>
+            <when test="sort == 'startSoon'">
+                ORDER BY CASE WHEN s.start_date IS NULL THEN 1 ELSE 0 END,
+                         s.start_date ASC,
+                         s.id DESC
+            </when>
+            <when test="sort == 'startLate'">
+                ORDER BY CASE WHEN s.start_date IS NULL THEN 1 ELSE 0 END,
+                         s.start_date DESC,
+                         s.id DESC
+            </when>
+            <otherwise>
+                <!-- 최신 등록 일정이 탐색 탭 상단에 보이도록 id DESC 정렬을 기본값으로 사용한다. -->
+                ORDER BY s.id DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insertSchedule"
+            parameterType="Schedule"
+            useGeneratedKeys="true"
+            keyProperty="id"
+            keyColumn="id">
+
+        insert into schedule (user_id,
+                              title,
+                              description,
+                              category,
+                              region,
+                              detail_region,
+                              chat_link,
+                              start_date,
+                              end_date,
+                              recruit_start_date,
+                              recruit_end_date,
+                              min_participants,
+                              max_participants,
+                              current_participants,
+                              age_min,
+                              age_max,
+                              gender_limit,
+                              total_price,
+                              cost_type,
+                              thumbnail_image,
+                              view_count,
+                              status,
+                              is_public,
+                              created_at)
+        values (#{userId},
+                #{title},
+                #{description},
+                #{category},
+                #{region},
+                #{detailRegion},
+                #{chatLink},
+                #{startDate},
+                #{endDate},
+                #{recruitStartDate},
+                #{recruitEndDate},
+                #{minParticipants},
+                #{maxParticipants},
+                1,
+                #{ageMin},
+                #{ageMax},
+                #{genderLimit},
+                #{totalPrice},
+                #{costType},
+                #{thumbnailImage},
+                0,
+                'recruiting',
+                1,
+                NOW())
+    </insert>
+
+    <insert id="insertScheduleDetail" parameterType="ScheduleDetail">
+        insert into schedule_detail (schedule_id,
+                                     day_number,
+                                     title,
+                                     description)
+        values (#{scheduleId},
+                #{dayNumber},
+                #{title},
+                #{description})
+    </insert>
+
+    <insert id="insertScheduleImage">
+        insert into schedule_image (schedule_id, image_url, is_thumbnail)
+        values
+        <foreach collection="imageUrls" item="url" index="idx" separator=",">
+            (
+            #{scheduleId},
+            #{url},
+            case when #{idx} = 0 then 1 else 0 end
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateThumbnail">
+        update schedule
+        set thumbnail_image = #{url}
+        where id = #{scheduleId}
+    </update>
+
+    <update id="updateSchedule"
+            parameterType="Schedule">
+        update schedule
+        set title              = #{title},
+            description        = #{description},
+            category           = #{category},
+            region             = #{region},
+            detail_region      = #{detailRegion},
+            chat_link          = #{chatLink},
+            start_date         = #{startDate},
+            end_date           = #{endDate},
+            recruit_start_date = #{recruitStartDate},
+            recruit_end_date   = #{recruitEndDate},
+            min_participants   = #{minParticipants},
+            max_participants   = #{maxParticipants},
+            age_min            = #{ageMin},
+            age_max            = #{ageMax},
+            gender_limit       = #{genderLimit},
+            total_price        = #{totalPrice},
+            cost_type          = #{costType},
+            thumbnail_image    = #{thumbnailImage},
+            updated_at         = NOW()
+        where id = #{id}
+    </update>
+
+    <select id="getScheduleImageCount" resultType="int">
+        select count(*)
+        from schedule_image
+        where id = #{scheduleId}
+    </select>
+
+    <delete id="deleteScheduleDetail"
+            parameterType="long">
+        delete
+        from schedule_detail
+        where schedule_id = #{scheduleId}
+    </delete>
+
+    <delete id="deleteScheduleImages">
+        delete from schedule_image
+        where id in
+        <foreach collection="deletedImageIds"
+                 item="id"
+                 open="("
+                 separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="updateScheduleImage">
+        insert into schedule_image (schedule_id, image_url, is_thumbnail)
+        values
+        <foreach collection="imageUrls" item="url" index="idx" separator=",">
+            (#{scheduleId}, #{url}, 0)
+        </foreach>
+    </insert>
+
+    <select id="getThumbnailImageUrl" resultType="String">
+        select image_url
+        from schedule_image
+        where schedule_id = #{scheduleId}
+        order by id asc limit 1
+    </select>
+
+    <delete id="deleteSchedule">
+        delete
+        from schedule
+        where id = #{scheduleId}
+    </delete>
+
+
+    <!-- 마이페이지- 완료된 일정만 띄우는 위트 로그(나의 위트 로그 카드 목록 조회용)-->
+    <select id="selectMyScheduleCards" parameterType="long" resultType="Schedule">
+        SELECT DISTINCT
+            cards.id,
+            cards.userId,
+            cards.title,
+            cards.region,
+            cards.detailRegion,
+            cards.startDate,
+            cards.endDate,
+            cards.thumbnailImage,
+            cards.currentParticipants,
+            cards.maxParticipants,
+            cards.status,
+            cards.createdAt
+        FROM (
+                 /*
+                  * 위트 로그는 "내가 완료까지 경험한 일정"을 보여주는 영역이다.
+                  * 그래서 approved participation이 있는 완료 일정뿐 아니라,
+                  * 과거 데이터처럼 participation row가 없더라도 내가 직접 생성한 completed 일정도 포함해야 한다.
+                  *
+                  * 왜 host/participant 두 경로를 나누는가?
+                  * - 최신 일정은 생성 시 host participation row 가 자동 생성될 수 있음
+                  * - 하지만 과거 데이터나 누락 데이터는 participation row 가 없을 수 있음
+                  * 그래서 participation 존재를 전제하지 않고, host completed 집합과 approved 참여 completed 집합을 각각 읽어 UNION 한다.
+                  */
+                 SELECT
+                     s.id,
+                     s.user_id AS userId,
+                     s.title,
+                     s.region,
+                     s.detail_region AS detailRegion,
+                     s.start_date AS startDate,
+                     s.end_date AS endDate,
+                     s.thumbnail_image AS thumbnailImage,
+                     s.current_participants AS currentParticipants,
+                     s.max_participants AS maxParticipants,
+                     s.status,
+                     s.created_at AS createdAt
+                 FROM schedule s
+                 WHERE s.user_id = #{userId}
+                   AND s.status = 'completed'
+                   AND s.deleted_at IS NULL
+
+                 UNION
+
+                 SELECT
+                     s.id,
+                     s.user_id AS userId,
+                     s.title,
+                     s.region,
+                     s.detail_region AS detailRegion,
+                     s.start_date AS startDate,
+                     s.end_date AS endDate,
+                     s.thumbnail_image AS thumbnailImage,
+                     s.current_participants AS currentParticipants,
+                     s.max_participants AS maxParticipants,
+                     s.status,
+                     s.created_at AS createdAt
+                 FROM participation p
+                          INNER JOIN schedule s
+                                     ON s.id = p.schedule_id
+                 WHERE p.user_id = #{userId}
+                   -- 참여 일정은 승인까지 완료된 사용자만 "실제로 함께한 일정"으로 간주한다.
+                   AND p.status = 'approved'
+                   AND s.status = 'completed'
+                   AND s.deleted_at IS NULL
+             ) cards
+        -- UNION 으로 중복 제거 후에도 노출 순서는 종료일 최신순을 유지한다.
+        ORDER BY cards.endDate DESC, cards.id DESC
+    </select>
+</mapper>

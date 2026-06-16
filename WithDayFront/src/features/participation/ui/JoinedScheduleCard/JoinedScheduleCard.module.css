@@ -1,0 +1,335 @@
+/* 내 일정 탭에서 사용하는 카드 외곽이다. grid 단일 컬럼으로 두어 썸네일과 내용이 항상 위아래로 쌓인다. */
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.24s ease, border-color 0.24s ease;
+  cursor: default;
+}
+
+/* hover 시 카드가 클릭 가능한 목록 항목처럼 보이되, 실제 액션은 내부 버튼으로만 전달한다. */
+.card:hover {
+  border-color: rgba(10, 22, 45, 0.12);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* 키보드 탐색 사용자가 현재 카드 포커스를 놓치지 않도록 공통 focus ring을 맞춘다. */
+.card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* 거절/강퇴처럼 더 이상 진행 중이 아닌 내역은 완전 숨김 대신 흐린 카드로 남겨 기록성을 유지한다. */
+.cardDisabled {
+  opacity: 0.82;
+}
+
+/* 썸네일 영역은 이미지 유무와 관계없이 카드 높이를 고정해 리스트 스캔 리듬을 맞춘다. */
+.thumbnailWrap {
+  position: relative;
+  width: 100%;
+  min-height: 180px;
+  background: var(--color-surface-soft);
+}
+
+/* 실제 썸네일은 비율보다 영역 채움을 우선해 카드 그리드가 깨지지 않게 한다. */
+.thumbnail {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 180px;
+  object-fit: cover;
+}
+
+/* 이미지가 없는 일정의 placeholder다. 빈 영역 대신 브랜드 톤을 보여 카드 품질이 낮아 보이지 않게 한다. */
+.thumbnailPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 180px;
+  background: linear-gradient(
+    135deg,
+    rgba(218, 241, 241, 1) 0%,
+    rgba(248, 250, 251, 1) 100%
+  );
+  color: var(--color-accent);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+}
+
+/* 카드 본문은 배지, 제목, 정보, 액션을 세로로 쌓는 영역이다. */
+.content {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* 상단 배지와 위치 pill을 작은 화면에서도 자연스럽게 줄바꿈하기 위한 래퍼다. */
+.topRow {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* 카테고리, D-day, 진행 상태 배지를 한 줄 안에서 가능한 만큼 배치한다. */
+.badgeGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+/* 여러 badge/pill이 같은 높이와 radius를 갖도록 공통 토큰처럼 묶은 selector다. */
+.categoryBadge,
+.dDayBadge,
+.phaseBadge,
+.locationPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* 카테고리는 일정 성격을 나타내므로 앱 accent light 톤을 사용한다. */
+.categoryBadge {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+/* D-day는 시간 민감 정보라 blue 계열로 구분한다. */
+.dDayBadge {
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+}
+
+/* 기본 phase는 모집/진행 가능 상태를 의미해 성공 톤을 쓴다. */
+.phaseBadge {
+  background: rgba(0, 169, 77, 0.14);
+  color: var(--color-success);
+}
+
+/* 모집중 상태는 신청 가능성을 강조한다. */
+.phase-open {
+  background: rgba(0, 169, 77, 0.14);
+  color: var(--color-success);
+}
+
+/* 모집종료/취소 계열은 사용자가 더 이상 신청 가능하다고 오해하지 않도록 error 톤을 쓴다. */
+.phase-closed {
+  background: rgba(236, 74, 154, 0.14);
+  color: var(--color-error);
+}
+
+/* 진행중 상태는 모집 가능과 다른 blue 톤으로 분리한다. */
+.phase-ongoing {
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+}
+
+/* 종료/취소/중립 phase는 정보성 배지로 낮은 대비를 준다. */
+.phase-canceled,
+.phase-ended,
+.phase-neutral {
+  background: var(--color-border-light);
+  color: var(--color-text-muted);
+}
+
+/* 위치 pill은 배지 그룹 아래에서도 왼쪽 기준으로 붙어 보이게 한다. */
+.locationPill {
+  align-self: flex-start;
+  background: rgba(10, 22, 45, 0.06);
+  color: var(--color-text-secondary);
+}
+
+/* 제목이 긴 일정도 카드 폭 밖으로 밀지 않도록 min-width를 0으로 고정한다. */
+.titleBlock {
+  min-width: 0;
+}
+
+/* 제목은 목록 가독성을 위해 두 줄까지만 보여준다. 전체 내용은 상세에서 확인한다. */
+.title {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-size: 1.08rem;
+  line-height: 1.45;
+  font-weight: 800;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* 날짜와 인원 요약을 담는 definition list다. margin을 제거해 카드 간격을 CSS gap으로만 제어한다. */
+.infoList {
+  display: grid;
+  margin: 0;
+}
+
+/* 아이콘 열과 텍스트 열을 분리해 날짜/인원 줄의 시작점을 맞춘다. */
+.infoItem {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  margin: 0;
+}
+
+/* 정보 라벨 아이콘은 텍스트보다 낮은 강조도를 유지한다. */
+.infoLabel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+}
+
+/* 정보 값은 줄바꿈 가능한 실제 텍스트 영역이다. */
+.infoValue {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+/* primary/secondary 버튼이 같은 폭으로 나란히 놓이는 액션 영역이다. */
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+/* 액션 버튼은 아이콘과 텍스트 간격을 고정하고 hover feedback만 가볍게 준다. */
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+/* hover 가능한 버튼만 살짝 떠오르게 해서 disabled 버튼과 상호작용 가능 버튼을 구분한다. */
+.actionButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(10, 22, 45, 0.12);
+}
+
+/* 상세보기처럼 가장 일반적인 진입 버튼은 accent로 강조한다. */
+.primaryButton {
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: var(--color-text-inverse) !important;
+}
+
+/* 호스트 관리 버튼은 운영 액션이므로 primary 톤을 사용한다. */
+.manageButton {
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-text-inverse) !important;
+}
+
+/* 보조 버튼은 다음 우선순위 액션이라 연한 accent 배경을 사용한다. */
+.secondaryButton {
+  background: var(--color-accent-light) !important;
+  border-color: var(--color-accent-light) !important;
+  color: var(--color-accent) !important;
+}
+
+/* 취소/삭제 계열 버튼은 destructive 의도를 분명히 하기 위해 error tint를 사용한다. */
+.dangerButton {
+  background: rgba(236, 74, 154, 0.14) !important;
+  border-color: rgba(236, 74, 154, 0.14) !important;
+  color: var(--color-error) !important;
+}
+
+@media (min-width: 768px) {
+  .card {
+    grid-template-columns: minmax(188px, 0.72fr) minmax(0, 1.28fr);
+    align-items: stretch;
+    height: 196px;
+  }
+
+  .thumbnailWrap {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .thumbnail,
+  .thumbnailPlaceholder {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .content {
+    box-sizing: border-box;
+    height: 100%;
+    min-height: 0;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 16px 18px;
+  }
+
+  .topRow {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .categoryBadge,
+  .dDayBadge,
+  .phaseBadge,
+  .locationPill {
+    min-height: 24px;
+    padding: 0 10px;
+    font-size: 0.72rem;
+  }
+
+  .title {
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+
+  .infoValue {
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+
+  .actionButton {
+    min-height: 36px;
+    padding: 8px 12px;
+    font-size: 0.84rem;
+  }
+
+  .actions > :only-child {
+    grid-column: 2;
+  }
+}
+
+@media (min-width: 1200px) {
+  .card {
+    grid-template-columns: minmax(208px, 0.76fr) minmax(0, 1.24fr);
+    height: 208px;
+  }
+
+  .content {
+    padding: 18px 20px;
+  }
+}
+
+@media (max-width: 479px) {
+  .actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

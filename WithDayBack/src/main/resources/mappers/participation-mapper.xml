@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.withdayback.participation.dao.ParticipationDao">
+    <!--
+        participation.status는 DB에는 소문자 pending/approved/rejected/canceled/kicked 형태로 저장된다.
+        반면 Java enum과 프론트 비교 로직은 대문자 PENDING/APPROVED/CANCELED 형태를 기준으로 동작한다.
+        이 공통 SQL 조각은 조회 시 상태값을 서버 표준 형태로 보정해, 화면과 서비스 로직이 저장 literal 차이에 흔들리지 않게 한다.
+    -->
+    <sql id="normalizedStatus">
+        CASE
+            WHEN UPPER(p.status) IN ('CANCELED', 'CANCELLED') THEN 'CANCELED'
+            ELSE UPPER(p.status)
+        END
+    </sql>
+
+    <!--
+        호스트가 신청자 상태를 변경할 때 participation row를 먼저 찾기 위한 조회다.
+        status는 normalizedStatus로 읽어와 Java enum에 매핑되며, 이후 Service에서 상태 전이 가능 여부를 판단한다.
+    -->
+    <select id="findById" resultType="Participation">
+        SELECT
+            p.id,
+            p.user_id AS userId,
+            p.schedule_id AS scheduleId,
+            <include refid="normalizedStatus" /> AS status,
+            p.created_at AS createdAt
+        FROM participation p
+        WHERE p.id = #{participationId}
+        LIMIT 1
+    </select>
+
+    <!--
+        참여 신청 중복 방지를 위한 조회다.
+        같은 email과 scheduleId로 기존 row가 하나라도 있으면 새 row를 만들지 않는다.
+        ORDER BY p.id DESC는 과거 데이터가 중복으로 남아 있더라도 최신 상태를 우선 확인하기 위한 방어 코드다.
+    -->
+    <select id="findByEmailAndScheduleId" resultType="Participation">
+        SELECT
+            p.id,
+            p.user_id AS userId,
+            p.schedule_id AS scheduleId,
+            <include refid="normalizedStatus" /> AS status,
+            p.created_at AS createdAt
+        FROM participation p
+        INNER JOIN user u ON u.id = p.user_id
+        WHERE u.email = #{email}
+          AND p.schedule_id = #{scheduleId}
+        ORDER BY p.id DESC
+        LIMIT 1
+    </select>
+
+    <!--
+        참여 신청 생성 쿼리다.
+        Service에서 ParticipationStatus.PENDING을 세팅하면 여기서는 enum의 databaseValue인 "pending"을 저장한다.
+        useGeneratedKeys=true로 생성된 participation.id를 VO에 되돌려 받아, 신청 성공 응답과 알림 흐름에서 사용할 수 있게 한다.
+    -->
+    <insert id="insertParticipation" parameterType="Participation" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO participation (
+            user_id,
+            schedule_id,
+            status,
+            created_at
+        ) VALUES (
+            #{userId},
+            #{scheduleId},
+            #{status.databaseValue},
+            NOW()
+        )
+    </insert>
+
+    <!--
+        호스트의 승인/거절/승인취소 상태 변경 쿼리다.
+        currentStatus 조건을 WHERE에 넣은 이유는 동시에 두 요청이 같은 신청을 바꾸는 상황을 막기 위해서다.
+        예를 들어 이미 APPROVED로 바뀐 row에 대해 PENDING 기준 REJECTED update가 들어오면 0건 update가 되어 Service가 실패로 처리한다.
+    -->
+    <update id="updateStatus">
+        UPDATE participation p
+        SET p.status = #{targetStatus}
+        WHERE p.id = #{participationId}
+          AND <include refid="normalizedStatus" /> = #{currentStatus}
+    </update>
+
+    <!--
+        일정 상세 페이지의 호스트 신청자 관리 목록이다.
+        user 테이블을 조인해 신청자의 email/nickname을 함께 내려주고,
+        status 파라미터가 있을 때는 PENDING/APPROVED 같은 탭 필터를 적용한다.
+
+        이 쿼리는 호스트 권한 검증을 통과한 Service에서만 호출된다.
+        phone/gender/profile_image는 호스트 신청자 카드에 직접 표시되는 값이고,
+        birthday는 화면/API JSON에 그대로 내보내지 않고 Service에서 KST 기준 fullAge 계산에만 사용한다.
+        ParticipationApplicantDTO.birthday가 @JsonIgnore인 이유도 이 개인정보 경계를 유지하기 위해서다.
+    -->
+    <select id="getScheduleApplicants" resultType="com.test.withdayback.participation.dto.ParticipationApplicantDTO">
+        SELECT
+            p.id AS participationId,
+            p.schedule_id AS scheduleId,
+            u.id AS userId,
+            u.email AS email,
+            u.nickname AS nickname,
+            u.profile_image AS profileImage,
+            u.phone AS phone,
+            u.gender AS gender,
+            u.birthday AS birthday,
+            <include refid="normalizedStatus" /> AS status,
+            p.created_at AS createdAt
+        FROM participation p
+        INNER JOIN user u ON u.id = p.user_id
+        WHERE p.schedule_id = #{scheduleId}
+        <if test="status != null and status != ''">
+            AND <include refid="normalizedStatus" /> = #{status}
+        </if>
+        ORDER BY p.id DESC
+    </select>
+
+    <!--
+        내 일정 카드에서 공통으로 쓰는 컬럼 묶음이다.
+        participation_id는 취소/삭제 액션에 필요하고, db_status는 프론트가 현재 참여 상태에 따라 버튼/배지를 결정하는 기준이다.
+        host 값은 같은 카드 UI에서 "내가 만든 일정"과 "내가 참여한 일정"을 구분하기 위해 포함한다.
+    -->
+    <sql id="myScheduleColumns">
+        s.id AS schedule_id,
+        p.id AS participation_id,
+        s.category AS category,
+        s.title AS title,
+        COALESCE(s.region, '') AS location,
+        si.image_url AS thumbnail,
+        s.start_date AS start_date,
+        s.end_date AS end_date,
+        s.recruit_end_date AS recruit_end_date,
+        s.current_participants AS current_people,
+        s.max_participants AS max_people,
+        <include refid="normalizedStatus" /> AS db_status,
+        s.status AS schedule_status,
+        FALSE AS host,
+        'participant' AS my_role
+    </sql>
+
+    <!--
+        사용자가 신청했거나 참여 중인 일정 목록이다.
+        프론트 탭에서 넘긴 statuses 목록으로 참여 상태를 필터링하고,
+        로그인 사용자의 participation row만 읽되 schedule.host와 같은 본인 호스팅 일정은 제외한다.
+        삭제된 일정과 이미 종료된 일정은 내 일정 목록에서 제외한다.
+    -->
+    <select id="getMyParticipations" resultType="com.test.withdayback.participation.dto.MyScheduleResponseDTO">
+        SELECT
+            <include refid="myScheduleColumns" />
+        FROM participation p
+        INNER JOIN schedule s ON s.id = p.schedule_id
+        LEFT JOIN schedule_image si
+               ON si.schedule_id = s.id
+              AND si.is_thumbnail = 1
+        WHERE p.user_id = #{userId}
+          AND s.user_id != #{userId}
+          AND s.deleted_at IS NULL
+          AND (s.end_date IS NULL OR s.end_date >= CURDATE())
+          AND <include refid="normalizedStatus" /> IN
+          <foreach collection="statuses" item="status" open="(" separator="," close=")">
+              #{status}
+          </foreach>
+        ORDER BY s.start_date ASC, p.id DESC
+    </select>
+
+    <!--
+        사용자가 호스트로 만든 일정 목록이다.
+        이 목록은 schedule.user_id 기준으로 읽어오므로, participation row가 없어도 호스팅 탭에서 일관되게 조회된다.
+        프론트는 host=true와 participationId=null 조합을 보고 취소/삭제가 아니라 상세 이동만 제공한다.
+        호스팅 탭은 "진행 중 일정"과 "마감된 일정"을 프론트에서 나눠 보여줘야 하므로,
+        여기서는 end_date로 미리 잘라내지 않고 삭제되지 않은 일정 전체를 내려준다.
+        그래야 closed/completed/canceled처럼 이미 끝난 일정도 호스트 화면의 마감 섹션에서 볼 수 있다.
+    -->
+    <select id="getMyHostingSchedules" resultType="com.test.withdayback.participation.dto.MyScheduleResponseDTO">
+        SELECT
+            s.id AS schedule_id,
+            NULL AS participation_id,
+            s.category AS category,
+            s.title AS title,
+            COALESCE(s.region, '') AS location,
+            si.image_url AS thumbnail,
+            s.start_date AS start_date,
+            s.end_date AS end_date,
+            s.recruit_end_date AS recruit_end_date,
+            s.current_participants AS current_people,
+            s.max_participants AS max_people,
+            s.status AS db_status,
+            s.status AS schedule_status,
+            TRUE AS host,
+            'host' AS my_role
+        FROM schedule s
+        LEFT JOIN schedule_image si
+               ON si.schedule_id = s.id
+              AND si.is_thumbnail = 1
+        WHERE s.user_id = #{userId}
+          AND s.deleted_at IS NULL
+        ORDER BY s.start_date ASC, s.id DESC
+    </select>
+
+    <!--
+        사용자의 참여 취소 쿼리다.
+        본인 row만 targetStatus(canceled)로 바꾸고, currentStatus는 Service에서 검증한 값을 그대로 받는다.
+        WHERE에 email과 currentStatus를 함께 두어 다른 사용자의 row를 건드리거나, 조회 이후 상태가 바뀐 row를 덮어쓰지 않게 한다.
+    -->
+    <update id="cancelParticipation">
+        UPDATE participation p
+        INNER JOIN user u ON u.id = p.user_id
+        SET p.status = #{targetStatus}
+        WHERE p.id = #{participationId}
+          AND u.email = #{email}
+          AND <include refid="normalizedStatus" /> = #{currentStatus}
+    </update>
+
+    <!--
+        내 일정 화면에서 거절/강퇴된 참여 내역을 삭제하는 쿼리다.
+        사용자가 임의로 승인 대기나 승인 완료 row를 삭제하지 못하도록 REJECTED, KICKED 상태만 허용한다.
+    -->
+    <delete id="deleteParticipation">
+        DELETE p
+        FROM participation p
+        INNER JOIN user u ON u.id = p.user_id
+        WHERE p.id = #{participationId}
+          AND u.email = #{email}
+          AND UPPER(p.status) IN ('REJECTED', 'KICKED')
+    </delete>
+
+    <!--
+        일정 상세 조회 시 현재 사용자의 참여 상태를 확인하는 쿼리다.
+        이 값은 프론트의 ApplyScheduleButton에서 "참여 신청하기", "신청 완료", "참여 확정" 같은 버튼 라벨을 결정하는 기준이다.
+    -->
+    <select id="findScheduleParticipationStatus" resultType="String">
+        SELECT
+            <include refid="normalizedStatus" /> AS status
+        FROM participation p
+        INNER JOIN user u ON u.id = p.user_id
+        WHERE p.schedule_id = #{scheduleId}
+          AND u.email = #{email}
+        ORDER BY p.id DESC
+        LIMIT 1
+    </select>
+</mapper>

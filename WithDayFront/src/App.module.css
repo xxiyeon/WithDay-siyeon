@@ -1,0 +1,122 @@
+:root {
+  --font-family-base:
+    "Suit",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  /* ===== Primary / Navy ===== */
+  --color-primary: #0a162d; /* 소제목/하단, 메인 네이비 */
+  --color-primary-light: #1f293e; /* 팔레트 1 */
+  --color-primary-soft: #2f4051; /* 팔레트 2 */
+  --color-primary-dark: #061024; /* 더 어두운 네이비 */
+
+  /* ===== Point / Brand ===== */
+  --color-accent: #1d9a99; /* 포인트 글씨 */
+  --color-accent-light: #daf1f1; /* 버튼 배경 */
+  --color-accent-dark: #147c7b;
+
+  /* ===== Background ===== */
+  --color-bg: #f8fafb; /* 기본 배경 */
+  --color-surface: #ffffff; /* 카드/섹션 배경 */
+  --color-surface-soft: #daf1f1; /* 연한 민트 배경 */
+  --color-surface-hover: #edfefe;
+  --color-surface-highlight: rgba(29, 154, 153, 0.08);
+  --color-overlay-glass: rgb(from var(--color-primary-dark) r g b / 0.68);
+  --color-overlay-shadow: rgb(from var(--color-primary-dark) r g b / 0.16);
+  --color-mask-solid: #000000;
+
+  /* ===== Text ===== */
+  --color-text-primary: #0a162d; /* 메인 텍스트 */
+  --color-text-secondary: #2f4051; /* 보조 텍스트 */
+  --color-text-muted: #8d8d8d; /* 비활성/설명 텍스트 */
+  --color-text-disabled: #d9d9d9; /* 비활성 텍스트 */
+  --color-text-inverse: #ffffff;
+
+  /* ===== Border ===== */
+  --color-border: #d9d9d9;
+  --color-border-light: #e9e9e9;
+  --color-border-dark: #8d8d8d;
+
+  /* ===== Schedule State ===== */
+  --color-status-closed: #ec4a9a; /* 마감 */
+  --color-status-urgent: #f66e17; /* 마감 임박 */
+  --color-status-available: #00a94d; /* 참여 가능 */
+
+  --color-status-closed-bg: rgba(236, 74, 154, 0.14);
+  --color-status-urgent-bg: rgba(246, 110, 23, 0.14);
+  --color-status-available-bg: rgba(0, 169, 77, 0.14);
+  --color-scrollbar-thumb: rgba(141, 141, 141, 0.35);
+
+  /* ===== State ===== */
+  --color-success: #00a94d;
+  --color-error: #ec4a9a;
+  --color-warning: #f66e17;
+  --color-info: #1d9a99;
+
+  /* ===== Shadow ===== */
+  --shadow-sm: 0 1px 2px rgba(10, 22, 45, 0.06);
+  --shadow-md: 0 4px 8px rgba(10, 22, 45, 0.08);
+  --shadow-lg: 0 10px 20px rgba(10, 22, 45, 0.12);
+  --shadow-panel: 0 12px 32px rgba(10, 22, 45, 0.06);
+  --shadow-hero: 0 18px 38px rgba(10, 22, 45, 0.12);
+  --shadow-card-ticket: drop-shadow(0 1px 3px rgba(10, 22, 45, 0.06));
+  --shadow-card-ticket-compact: drop-shadow(0 1px 2px rgba(10, 22, 45, 0.06));
+  --shadow-card-ticket-hover: drop-shadow(0 4px 8px rgba(10, 22, 45, 0.08));
+
+  /* ===== Radius ===== */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* ===== Transition ===== */
+  --transition-fast: 0.15s ease-in-out;
+  --transition-default: 0.25s ease-in-out;
+
+  /* ===== Layout ===== */
+  --bottom-nav-height: 64px;
+  --bottom-nav-total-height: calc(
+    var(--bottom-nav-height) + 8px + env(safe-area-inset-bottom)
+  );
+  --toast-gap-from-chrome: 16px;
+}
+
+:global(html),
+:global(body),
+:global(#root) {
+  font-family: var(--font-family-base);
+}
+
+:global(html) {
+  scrollbar-gutter: stable;
+}
+
+@supports not (scrollbar-gutter: stable) {
+  :global(html) {
+    overflow-y: scroll;
+  }
+}
+
+:global(body) {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== Layout ===== */
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background-color: var(--color-bg);
+  font-family: var(--font-family-base);
+  /* color: var(--color-text-primary); */
+}
+
+.mainContent {
+  flex: 1;
+  min-height: auto;
+  overflow: visible;
+  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+}

@@ -1,0 +1,192 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 28px 0 64px;
+}
+
+.hero {
+  padding: 28px;
+  border-radius: 28px;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(229, 93, 121, 0.12),
+      transparent 30%
+    ),
+    linear-gradient(145deg, #fff7f9, #ffffff 68%);
+  border: 1px solid #f3d8df;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: #d14d69;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.title {
+  margin: 0 0 10px;
+  color: #10203d;
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.description {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.listSection {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: #10203d;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.sectionCaption {
+  margin: 0;
+  margin-bottom: 14px;
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+.stateBox,
+.emptyBox {
+  padding: 28px 24px;
+  border-radius: 24px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.06);
+  text-align: center;
+}
+
+.errorBox {
+  border-color: #f3c7d0;
+  background: #fff8fa;
+}
+
+.loadingSpinner {
+  width: 28px;
+  height: 28px;
+  margin: 0 auto 12px;
+  border-radius: 999px;
+  border: 3px solid #f2c7d0;
+  border-top-color: #d14d69;
+  animation: spin 0.9s linear infinite;
+}
+
+.emptyTitle {
+  margin: 0 0 8px;
+  color: #10203d;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.emptyDescription {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+.wishlistCardGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 220px);
+  justify-content: center;
+  align-items: start;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+  padding-bottom: 8px;
+}
+
+/* 작은 모바일 */
+@media (max-width: 360px) {
+  .wishlistCardGrid {
+    grid-template-columns: repeat(1, 204px);
+    gap: 14px;
+  }
+}
+
+/* 640px 이상: 한 줄에 2개 */
+@media (min-width: 640px) {
+  .wishlistCardGrid {
+    grid-template-columns: repeat(2, 222px);
+    gap: 16px 18px;
+  }
+}
+
+/* 768px 이상: 한 줄에 3개 */
+@media (min-width: 768px) {
+  .wishlistCardGrid {
+    grid-template-columns: repeat(3, 222px);
+    gap: 18px 18px;
+  }
+}
+
+/* 769px 이상: 카드 230px 기준 */
+@media (min-width: 769px) {
+  .wishlistCardGrid {
+    grid-template-columns: repeat(3, 230px);
+    gap: 20px 20px;
+  }
+}
+
+/* 1024px 이상: 한 줄에 4개 */
+@media (min-width: 1024px) {
+  .wishlistCardGrid {
+    grid-template-columns: repeat(4, 230px);
+    gap: 20px 20px;
+  }
+}
+
+/* 1025px 이상: 카드 240px 기준 */
+@media (min-width: 1025px) {
+  .wishlistCardGrid {
+    grid-template-columns: repeat(4, 240px);
+    gap: 22px 22px;
+  }
+}
+
+/* 1440px 이상: 한 줄에 5개 */
+@media (min-width: 1440px) {
+  .wishlistCardGrid {
+    grid-template-columns: repeat(5, 240px);
+    gap: 24px 24px;
+  }
+}
+
+/* 2560px 이상: 한 줄에 6개 */
+@media (min-width: 2560px) {
+  .wishlistCardGrid {
+    grid-template-columns: repeat(6, 240px);
+    gap: 26px 28px;
+  }
+}

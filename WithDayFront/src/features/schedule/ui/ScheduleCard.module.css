@@ -1,0 +1,1077 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: 100%;
+  background: transparent;
+  filter: var(--shadow-card-ticket);
+  cursor: pointer;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.cardInteractive {
+  outline: 1px solid transparent;
+  outline-offset: 0;
+  transition: filter 0.24s ease;
+}
+
+.cardCompact {
+  filter: var(--shadow-card-ticket-compact);
+}
+
+.cardTop,
+.cardBottom,
+.ticketDivider {
+  background: var(--color-surface);
+  transition: background-color 0.24s ease;
+}
+
+.cardTop {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 16px 16px 14px;
+}
+
+.cardTopCompact {
+  gap: 10px;
+  padding: 13px 13px 11px;
+}
+
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+.topMetaGroup {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex: 0 0 auto;
+}
+
+.topMetaActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.metaActionGroup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.softPill,
+.metaPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.softPillCompact,
+.metaPillCompact {
+  min-height: 24px;
+  padding: 0 9px;
+  font-size: 0.72rem;
+}
+
+.metaPill {
+  background: var(--color-accent-light);
+  color: var(--color-accent-dark);
+}
+
+.deadlinePillBase {
+  justify-content: center;
+  min-width: 0;
+  margin-left: -16px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 0 999px 999px 0;
+}
+
+.deadlinePill {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.deadlinePillToday,
+.deadlinePillClosed {
+  background: var(--color-status-closed);
+  color: var(--color-text-inverse);
+}
+
+.bookmarkIndicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.bookmarkIndicatorActive {
+  color: var(--color-status-closed);
+}
+
+.bookmarkIcon {
+  font-size: 1.05rem;
+}
+
+.titleGroup,
+.dateRow,
+.dateRowContent,
+.descriptionRow {
+  min-width: 0;
+}
+
+.titleGroup {
+  flex: 1 1 auto;
+}
+
+.dateRow {
+  align-items: stretch;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.dateRowContent {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-width: 0;
+  margin: 0 0 5px 5px;
+}
+
+.dateIconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.dateIcon {
+  font-size: 0.88rem;
+}
+
+.dateChevronWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-disabled);
+  flex-shrink: 0;
+}
+
+.dateText {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.28;
+  white-space: normal;
+  word-break: keep-all;
+}
+
+.dateTextCompact {
+  font-size: 0.84rem;
+}
+
+.cardTitle {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 1.12rem;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.cardTitleCompact {
+  font-size: 0.98rem;
+}
+
+.cardDescription {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.86rem;
+  line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.cardDescriptionCompact {
+  font-size: 0.78rem;
+}
+
+.ticketDivider {
+  position: relative;
+  height: 34px;
+  -webkit-mask-image:
+    radial-gradient(
+      circle at left center,
+      transparent 0 13px,
+      var(--color-mask-solid) 13.5px
+    ),
+    radial-gradient(
+      circle at right center,
+      transparent 0 13px,
+      var(--color-mask-solid) 13.5px
+    );
+  -webkit-mask-size: 51% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: left, right;
+  mask-image:
+    radial-gradient(
+      circle at left center,
+      transparent 0 13px,
+      var(--color-mask-solid) 13.5px
+    ),
+    radial-gradient(
+      circle at right center,
+      transparent 0 13px,
+      var(--color-mask-solid) 13.5px
+    );
+  mask-size: 51% 100%;
+  mask-repeat: no-repeat;
+  mask-position: left, right;
+}
+
+.ticketDivider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 24px;
+  right: 24px;
+  border-top: 2px dashed var(--color-border);
+  transform: translateY(-50%);
+}
+
+.cardBottom {
+  padding: 14px 16px 16px;
+}
+
+.cardBottomCompact {
+  padding: 0 13px 13px;
+}
+
+.thumbnailWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    var(--color-bg) 0%,
+    var(--color-border-light) 100%
+  );
+}
+
+.thumbnailWrapCompact {
+  aspect-ratio: 2 / 1;
+}
+
+.thumbnail {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.thumbnailFallback,
+.cardCompact .thumbnailFallback {
+  object-fit: fill;
+  object-position: center center;
+}
+
+.thumbnailOverlay {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: calc(100% - 24px);
+}
+
+.overlayPill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--color-overlay-glass);
+  color: var(--color-text-inverse);
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px var(--color-overlay-shadow);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.overlayPillCompact {
+  min-height: 24px;
+  padding: 0 9px;
+  font-size: 0.72rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cardInteractive:hover {
+    filter: var(--shadow-card-ticket-hover);
+  }
+
+  .cardInteractive:hover .cardTop,
+  .cardInteractive:hover .cardBottom,
+  .cardInteractive:hover .ticketDivider {
+    background: var(--color-surface-hover);
+  }
+}
+
+/* =========================
+   Ticket Card Layout
+   - 홈 / 탐색 / 위시리스트 / 추천 일정 공통 카드
+   - JSX className 변경 없음
+   ========================= */
+
+.homeTicketCard {
+  position: relative;
+}
+
+.cardCompact:global(.homeTicketCard) {
+  --ticket-card-width: 240px;
+  --ticket-card-height: 300px;
+
+  --ticket-top-height: 174px;
+  --ticket-bottom-top: 174px;
+  --ticket-bottom-height: 126px;
+
+  --ticket-hole-top: 158px;
+  --ticket-divider-top: 166px;
+
+  --ticket-x: 12px;
+
+  /* 텍스트 묶음을 위로 올려 설명 아래 여백 확보 */
+  --ticket-title-top: 76px;
+  --ticket-description-top: 8px;
+
+  --ticket-image-top: 10px;
+  --ticket-image-height: 108px;
+
+  --ticket-title-height: 40px;
+  --ticket-title-font-size: 15.5px;
+  --ticket-title-line-height: 20px;
+
+  --ticket-description-height: 28px;
+  --ticket-description-font-size: 9.5px;
+  --ticket-description-line-height: 14px;
+
+  --ticket-date-top: 42px;
+  --ticket-date-font-size: 10px;
+  --ticket-date-line-height: 13px;
+
+  --ticket-pill-height: 18px;
+  --ticket-pill-top: 13px;
+  --ticket-deadline-font-size: 10px;
+  --ticket-gender-font-size: 9px;
+
+  display: block;
+  position: relative;
+
+  width: var(--ticket-card-width);
+  min-width: var(--ticket-card-width);
+  max-width: var(--ticket-card-width);
+
+  height: var(--ticket-card-height);
+  min-height: var(--ticket-card-height);
+  max-height: var(--ticket-card-height);
+
+  padding: 0;
+  overflow: visible;
+
+  background: #ffffff;
+  border: none;
+  border-radius: 0;
+
+  filter: none;
+  transform: none;
+  box-shadow: 0 1px 7px rgba(10, 22, 45, 0.1);
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.cardCompact:global(.homeTicketCard):hover {
+  background: #f8f8f8;
+  filter: none;
+  transform: none;
+  box-shadow: 0 1px 7px rgba(10, 22, 45, 0.1);
+}
+
+.cardCompact:global(.homeTicketCard)::before,
+.cardCompact:global(.homeTicketCard)::after {
+  content: "";
+  position: absolute;
+  top: var(--ticket-hole-top);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f8fafb;
+  z-index: 80;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+.cardCompact:global(.homeTicketCard)::before {
+  left: -8px;
+}
+
+.cardCompact:global(.homeTicketCard)::after {
+  right: -8px;
+}
+
+.cardCompact:global(.homeTicketCard) .cardTop,
+.cardCompact:global(.homeTicketCard) .cardBottom,
+.cardCompact:global(.homeTicketCard) .ticketDivider {
+  background: transparent;
+  transition: none;
+}
+
+.cardCompact:global(.homeTicketCard):hover .cardTop,
+.cardCompact:global(.homeTicketCard):hover .cardBottom,
+.cardCompact:global(.homeTicketCard):hover .ticketDivider {
+  background: transparent;
+}
+
+.cardCompact:global(.homeTicketCard) .cardTop {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: var(--ticket-top-height);
+  min-height: 0;
+  padding: 0;
+}
+
+.cardCompact:global(.homeTicketCard) .headerSection {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: var(--ticket-top-height);
+  padding: 0;
+}
+
+.cardCompact:global(.homeTicketCard) .cardBottom {
+  position: absolute;
+  left: 0;
+  top: var(--ticket-bottom-top);
+  width: 100%;
+  height: var(--ticket-bottom-height);
+  padding: 0;
+}
+
+.cardCompact:global(.homeTicketCard) .infoRow,
+.cardCompact:global(.homeTicketCard) .topRow,
+.cardCompact:global(.homeTicketCard) .dateRow,
+.cardCompact:global(.homeTicketCard) .titleRow,
+.cardCompact:global(.homeTicketCard) .descriptionRow {
+  position: static;
+  display: block;
+  width: auto;
+  min-width: 0;
+  gap: 0;
+  border: none;
+}
+
+.cardCompact:global(.homeTicketCard) .ticketDivider {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.cardCompact:global(.homeTicketCard) .ticketDivider::after {
+  content: "";
+  position: absolute;
+  left: var(--ticket-x);
+  right: var(--ticket-x);
+  top: var(--ticket-divider-top);
+  height: 0;
+  border-top: 1px dashed var(--color-border-dark);
+  transform: none;
+  display: block;
+  z-index: 45;
+}
+
+.cardCompact:global(.homeTicketCard) .deadlinePillBase {
+  position: absolute;
+  left: 0;
+  top: var(--ticket-pill-top);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  width: auto;
+  min-width: 0;
+  height: var(--ticket-pill-height);
+  min-height: var(--ticket-pill-height);
+
+  margin: 0;
+  padding: 0 10px 0 12px;
+
+  border-radius: 0 999px 999px 0;
+  background: var(--color-primary);
+  color: #ffffff;
+
+  font-family: Poppins, "Noto Sans KR", sans-serif;
+  font-size: var(--ticket-deadline-font-size);
+  font-weight: 700;
+  line-height: var(--ticket-pill-height);
+  letter-spacing: 0;
+
+  z-index: 20;
+}
+
+.cardCompact:global(.homeTicketCard) .deadlinePillToday {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-weight: 500;
+}
+
+.cardCompact:global(.homeTicketCard) .deadlinePillClosed {
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
+.cardCompact:global(.homeTicketCard) .topMetaActions,
+.cardCompact:global(.homeTicketCard) .metaActionGroup {
+  position: static;
+  display: block;
+}
+
+.cardCompact:global(.homeTicketCard) .genderPill {
+  position: absolute;
+  right: 38px;
+  top: var(--ticket-pill-top);
+
+  min-width: 0;
+  height: var(--ticket-pill-height);
+  min-height: var(--ticket-pill-height);
+
+  padding: 0;
+  border-radius: 0;
+
+  background: transparent;
+  color: #0a162d;
+
+  font-family: Poppins, "Noto Sans KR", sans-serif;
+  font-size: var(--ticket-gender-font-size);
+  font-weight: 700;
+  line-height: var(--ticket-pill-height);
+
+  z-index: 20;
+}
+
+.cardCompact:global(.homeTicketCard) .bookmarkIndicator {
+  position: absolute;
+  right: var(--ticket-x);
+  top: var(--ticket-pill-top);
+
+  width: 18px;
+  height: 18px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #c9cfd8;
+  z-index: 20;
+}
+
+.cardCompact:global(.homeTicketCard):hover .bookmarkIndicator {
+  color: #8fbfc0;
+}
+
+.cardCompact:global(.homeTicketCard) .bookmarkIndicatorActive {
+  color: #1d9a99;
+}
+
+.cardCompact:global(.homeTicketCard) .bookmarkIcon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.cardCompact:global(.homeTicketCard) .dateRowContent {
+  position: absolute;
+  left: var(--ticket-x);
+  top: var(--ticket-date-top);
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+
+  width: auto;
+  margin: 0;
+  z-index: 20;
+}
+
+.cardCompact:global(.homeTicketCard) .dateIconWrap {
+  width: 13px;
+  min-width: 13px;
+  height: 13px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+}
+
+.cardCompact:global(.homeTicketCard) .dateIcon {
+  width: 13px;
+  height: 13px;
+  font-size: 13px;
+}
+
+.cardCompact:global(.homeTicketCard) .dateText {
+  width: auto;
+  max-width: calc(var(--ticket-card-width) - 32px);
+
+  color: #000000;
+  font-family: Poppins, "Noto Sans KR", sans-serif;
+  font-size: var(--ticket-date-font-size);
+  font-weight: 600;
+  line-height: var(--ticket-date-line-height);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardCompact:global(.homeTicketCard) .dateChevronWrap {
+  display: none;
+}
+
+.cardCompact:global(.homeTicketCard) .titleRow {
+  position: relative;
+  display: block;
+  width: calc(100% - (var(--ticket-x) * 2));
+  max-width: calc(100% - (var(--ticket-x) * 2));
+  margin-left: var(--ticket-x);
+  margin-top: var(--ticket-title-top);
+  overflow: hidden;
+  z-index: 10;
+}
+
+.cardCompact:global(.homeTicketCard) .titleGroup {
+  position: static;
+  width: 100%;
+  overflow: hidden;
+}
+
+.cardCompact:global(.homeTicketCard) .cardTitle {
+  display: -webkit-box;
+  width: 100%;
+
+  height: var(--ticket-title-height);
+  min-height: var(--ticket-title-height);
+  max-height: var(--ticket-title-height);
+
+  margin: 0;
+
+  color: #000000;
+  font-family: Poppins, "Noto Sans KR", sans-serif;
+  font-size: var(--ticket-title-font-size);
+  font-weight: 600;
+  line-height: var(--ticket-title-line-height);
+  letter-spacing: -0.02em;
+
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  overflow: hidden;
+
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.cardCompact:global(.homeTicketCard) .titleLine {
+  display: inline;
+  height: auto;
+  line-height: inherit;
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+}
+
+.cardCompact:global(.homeTicketCard) .descriptionRow {
+  position: relative;
+  display: block;
+  width: calc(100% - (var(--ticket-x) * 2));
+  max-width: calc(100% - (var(--ticket-x) * 2));
+  margin-left: var(--ticket-x);
+  margin-top: var(--ticket-description-top);
+  overflow: hidden;
+  z-index: 10;
+}
+
+.cardCompact:global(.homeTicketCard) .cardDescription {
+  display: -webkit-box;
+  width: 100%;
+
+  height: var(--ticket-description-height);
+  min-height: var(--ticket-description-height);
+  max-height: var(--ticket-description-height);
+
+  margin: 0;
+
+  color: #344054;
+  font-family: "Noto Sans KR", Poppins, sans-serif;
+  font-size: var(--ticket-description-font-size);
+  font-weight: 400;
+  line-height: var(--ticket-description-line-height);
+  letter-spacing: -0.01em;
+
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  overflow: hidden;
+
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.cardCompact:global(.homeTicketCard) .thumbnailWrap {
+  position: absolute;
+  left: var(--ticket-x);
+  right: var(--ticket-x);
+  top: var(--ticket-image-top);
+
+  width: auto;
+  height: var(--ticket-image-height);
+  aspect-ratio: auto;
+
+  overflow: hidden;
+  background: #ffffff;
+  z-index: 5;
+  border-radius: 0;
+}
+
+.cardCompact:global(.homeTicketCard) .thumbnail {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  object-fit: cover;
+  object-position: center;
+}
+
+.cardCompact:global(.homeTicketCard) .thumbnailFallback {
+  object-fit: cover;
+}
+
+.cardCompact:global(.homeTicketCard) .thumbnailOverlay {
+  position: absolute;
+  left: 7px;
+  bottom: 7px;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+
+  max-width: calc(100% - 14px);
+  z-index: 10;
+}
+
+.cardCompact:global(.homeTicketCard) .overlayPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 17px;
+  min-height: 17px;
+  padding: 0 8px;
+
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #0a162d;
+
+  font-family: Poppins, "Noto Sans KR", sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+
+  box-shadow: 0 1px 4px rgba(10, 22, 45, 0.12);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.cardCompact:global(.homeTicketCard):hover .overlayPill {
+  background: rgba(255, 255, 255, 0.94);
+}
+
+/* =========================
+   Ticket Card Responsive
+   ========================= */
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .cardCompact:global(.homeTicketCard) {
+    --ticket-card-width: 230px;
+    --ticket-card-height: 288px;
+
+    --ticket-top-height: 166px;
+    --ticket-bottom-top: 166px;
+    --ticket-bottom-height: 122px;
+
+    --ticket-hole-top: 150px;
+    --ticket-divider-top: 158px;
+
+    --ticket-title-top: 74px;
+    --ticket-description-top: 7px;
+    --ticket-image-height: 103px;
+  }
+}
+
+@media (max-width: 768px) and (min-width: 640px) {
+  .cardCompact:global(.homeTicketCard) {
+    --ticket-card-width: 222px;
+    --ticket-card-height: 278px;
+
+    --ticket-top-height: 154px;
+    --ticket-bottom-top: 154px;
+    --ticket-bottom-height: 124px;
+
+    --ticket-hole-top: 138px;
+    --ticket-divider-top: 146px;
+
+    --ticket-x: 11px;
+    --ticket-title-top: 68px;
+    --ticket-description-top: 5px;
+    --ticket-image-height: 106px;
+
+    --ticket-title-height: 38px;
+    --ticket-title-font-size: 14.5px;
+    --ticket-title-line-height: 19px;
+
+    --ticket-date-font-size: 9.6px;
+    --ticket-date-line-height: 12px;
+
+    --ticket-deadline-font-size: 9.5px;
+    --ticket-gender-font-size: 8.8px;
+  }
+
+  .cardCompact:global(.homeTicketCard) .genderPill {
+    right: 35px;
+  }
+
+  .cardCompact:global(.homeTicketCard) .bookmarkIndicator {
+    top: 13px;
+  }
+
+  .cardCompact:global(.homeTicketCard) .thumbnailOverlay {
+    left: 6px;
+    bottom: 6px;
+    gap: 4px;
+    max-width: calc(100% - 12px);
+  }
+
+  .cardCompact:global(.homeTicketCard) .overlayPill {
+    height: 17px;
+    min-height: 17px;
+    padding: 0 7px;
+    font-size: 8.5px;
+    line-height: 17px;
+  }
+}
+
+@media (max-width: 639px) {
+  .cardCompact:global(.homeTicketCard) {
+    --ticket-card-width: 220px;
+    --ticket-card-height: 276px;
+
+    --ticket-top-height: 149px;
+    --ticket-bottom-top: 149px;
+    --ticket-bottom-height: 127px;
+
+    --ticket-hole-top: 135px;
+    --ticket-divider-top: 143px;
+
+    --ticket-x: 11px;
+    --ticket-title-top: 64px;
+    --ticket-description-top: 5px;
+    --ticket-image-top: 11px;
+    --ticket-image-height: 109px;
+
+    --ticket-title-height: 36px;
+    --ticket-title-font-size: 13.4px;
+    --ticket-title-line-height: 18px;
+
+    --ticket-description-height: 26px;
+    --ticket-description-font-size: 8.7px;
+    --ticket-description-line-height: 13px;
+
+    --ticket-date-top: 40px;
+    --ticket-date-font-size: 8.8px;
+    --ticket-date-line-height: 12px;
+
+    --ticket-pill-height: 17px;
+    --ticket-pill-top: 12px;
+    --ticket-deadline-font-size: 8.8px;
+    --ticket-gender-font-size: 8px;
+  }
+
+  .cardCompact:global(.homeTicketCard) .dateIcon,
+  .cardCompact:global(.homeTicketCard) .dateIconWrap {
+    width: 11px;
+    min-width: 11px;
+    height: 11px;
+    font-size: 11px;
+  }
+
+  .cardCompact:global(.homeTicketCard) .genderPill {
+    right: 32px;
+  }
+
+  .cardCompact:global(.homeTicketCard) .bookmarkIndicator {
+    top: 11px;
+  }
+
+  .cardCompact:global(.homeTicketCard) .ticketDivider::after {
+    left: 19px;
+    right: 19px;
+  }
+
+  .cardCompact:global(.homeTicketCard) .overlayPill {
+    height: 15px;
+    min-height: 15px;
+    padding: 0 6px;
+    font-size: 7.8px;
+    line-height: 1;
+  }
+
+  .cardCompact:global(.homeTicketCard) .thumbnailOverlay {
+    gap: 4px;
+  }
+}
+
+@media (max-width: 360px) {
+  .cardCompact:global(.homeTicketCard) {
+    --ticket-card-width: 204px;
+    --ticket-card-height: 258px;
+
+    --ticket-top-height: 140px;
+    --ticket-bottom-top: 140px;
+    --ticket-bottom-height: 118px;
+
+    --ticket-hole-top: 126px;
+    --ticket-divider-top: 134px;
+
+    --ticket-title-top: 58px;
+    --ticket-description-top: 4px;
+    --ticket-image-height: 98px;
+
+    --ticket-title-height: 34px;
+    --ticket-title-font-size: 12.9px;
+    --ticket-title-line-height: 17px;
+
+    --ticket-description-height: 24px;
+    --ticket-description-font-size: 8.2px;
+    --ticket-description-line-height: 12px;
+  }
+
+  .cardCompact:global(.homeTicketCard) .ticketDivider::after {
+    left: 17px;
+    right: 17px;
+  }
+}
+
+@media (max-width: 320px) {
+  .cardCompact:global(.homeTicketCard) {
+    --ticket-title-top: 56px;
+    --ticket-description-top: 4px;
+
+    --ticket-title-height: 32px;
+    --ticket-title-font-size: 12.2px;
+    --ticket-title-line-height: 16px;
+
+    --ticket-description-height: 22px;
+    --ticket-description-font-size: 7.8px;
+    --ticket-description-line-height: 11px;
+
+    --ticket-deadline-font-size: 7.8px;
+    --ticket-gender-font-size: 7.2px;
+  }
+
+  .cardCompact:global(.homeTicketCard) .bookmarkIcon {
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+  }
+
+  .cardCompact:global(.homeTicketCard) .overlayPill {
+    height: 13px;
+    min-height: 13px;
+    padding: 0 5px;
+    font-size: 7px;
+  }
+
+  .cardCompact:global(.homeTicketCard) .thumbnailOverlay {
+    left: 5px;
+    bottom: 5px;
+    gap: 3px;
+  }
+}

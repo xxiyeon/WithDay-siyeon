@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.withdayback.user.dao.UserDao">
+
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `user` (
+            email, password, provider, provider_id, nickname,
+            profile_image, birthday, gender, phone,
+            status, postcode, address, detail_address, created_at
+        ) VALUES (
+            #{email}, #{password}, #{provider}, #{providerId}, #{nickname},
+            #{profileImage}, #{birthday}, #{gender}, #{phone},
+            'active', #{postcode}, #{address}, #{detailAddress}, NOW()
+        )
+    </insert>
+
+    <select id="findByEmail" parameterType="String" resultType="User">
+        SELECT *
+        FROM `user`
+        WHERE email = #{email}
+          AND status IN ('active', 'admin')
+    </select>
+
+    <select id="findAnyByEmail" parameterType="String" resultType="User">
+        SELECT *
+        FROM `user`
+        WHERE email = #{email}
+    </select>
+
+    <select id="findUserIdByEmail" parameterType="String" resultType="long">
+        SELECT id
+        FROM `user`
+        WHERE email = #{email}
+          AND status IN ('active', 'admin')
+    </select>        
+
+    <!-- 현재 nickname + phone에 DB unique 제약조건이 없으므로, 혹시 중복 데이터가 있더라도 한 명만 조회되도록 LIMIT 1 사용 -->
+    <select id="findByNicknameAndPhone" parameterType="FindAccountDTO" resultType="User">
+        SELECT *
+        FROM `user`
+        WHERE nickname = #{nickname} AND phone = #{phone} AND status IN ('active', 'admin')
+        LIMIT 1
+    </select>
+
+    <insert id="insertUserTerms" parameterType="UserTerms">
+        INSERT INTO user_terms (user_id, terms_id, agreed, agreed_at)
+        VALUES (#{userId}, #{termsId}, #{agreed}, NOW())
+    </insert>
+
+    <select id="getAllTerms" resultType="Terms">
+        SELECT type, version, content, is_required AS isRequired
+        FROM terms
+    </select>
+
+    <select id="findById" parameterType="Long" resultType="User">
+        SELECT * FROM `user` WHERE id = #{userId}
+    </select>
+    
+    <select id="getAllInterests" resultType="Interest">
+        SELECT
+            id,
+            name AS interestName,
+            icon_name AS iconName
+        FROM interests
+        ORDER BY id ASC
+    </select>
+
+    <insert id="insertUserInterest" parameterType="UserInterest">
+        INSERT INTO user_interests (
+            user_id,
+            interest_id,
+            created_at
+        )
+        VALUES (
+                   #{userId},
+                   #{interestId},
+                   NOW()
+               )
+    </insert>
+    <!-- 유저가 선택한 관심사 id 목록 가져오기 -->
+    <select id="getUserInterestIds" resultType="long">
+        SELECT interest_id
+        FROM user_interests
+        WHERE user_id = #{userId}
+        ORDER BY interest_id ASC
+    </select>
+
+    <!-- 유저의 알림 동의 여부 가져오기 -->
+    <select id="getNotificationAgreed" parameterType = "long" resultType="boolean">
+        SELECT agreed
+        FROM user_terms
+        WHERE user_id = #{userId}
+          AND terms_id = 4
+            LIMIT 1
+    </select>
+
+    <!-- 마이페이지 유저 기본 정보 수정 -->
+    <update id="updateMypageUser" parameterType="User">
+        UPDATE user
+        SET
+        nickname = #{nickname},
+        phone = #{phone},
+        gender = #{gender},
+        intro = #{intro},
+        profile_image = #{profileImage},
+        postcode = #{postcode},
+        address = #{address},
+        detail_address = #{detailAddress}
+        <if test="password != null and password != ''">
+            , password = #{password}
+        </if>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 유저의 기존 관심사 전체 삭제 -->
+    <delete id="deleteUserInterests" parameterType = "long">
+        DELETE FROM user_interests
+        WHERE user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUserTermsByUserId" parameterType="long">
+        DELETE FROM user_terms
+        WHERE user_id = #{userId}
+    </delete>
+
+    <delete id="deleteNotificationsByUserId" parameterType="long">
+        DELETE FROM notification
+        WHERE receiver_id = #{userId}
+    </delete>
+
+    <update id="closeSchedulesByHostUserId" parameterType="long">
+        UPDATE schedule
+        SET status = 'closed'
+        WHERE user_id = #{userId}
+          AND deleted_at IS NULL
+          AND status = 'recruiting'
+    </update>
+
+    <delete id="deleteNonApprovedParticipationsByUserId" parameterType="long">
+        DELETE FROM participation
+        WHERE user_id = #{userId}
+          AND status &lt;&gt; 'approved'
+    </delete>
+
+    <!-- 특정 유저가 특정 약관에 대한 동의 내역을 가지고 있는지 확인 -->
+    <select id="countUserTerms" resultType="int">
+        SELECT COUNT(*)
+        FROM user_terms
+        WHERE user_id = #{userId}
+          AND terms_id = #{termsId}
+    </select>
+
+    <!-- 유저의 특정 약관 동의 여부 수정 -->
+    <update id="updateUserTermsAgreed" parameterType = "UserTerms">
+        UPDATE user_terms
+        SET
+            agreed = #{agreed},
+            agreed_at = NOW()
+        WHERE user_id = #{userId}
+          AND terms_id = #{termsId}
+    </update>
+    <!--비밀번호 수정(로컬일 때만 변경가능함)-->
+    <update id="updatePassword">
+        UPDATE `user`
+        SET password = #{password}
+        WHERE email = #{email} AND status IN ('active', 'admin')
+    </update>
+    <!--이미지 수정-->
+    <update id="updateProfileImage">
+        UPDATE user
+        SET profile_image = #{profileImage}
+        WHERE id = #{userId}
+    </update>
+
+    <delete id="deleteBookmarksByUserId" parameterType="long">
+        DELETE FROM bookmark
+        WHERE user_id = #{userId}
+    </delete>
+
+    <update id="softDeleteUser">
+        UPDATE `user`
+        SET
+            status = 'suspended',
+            email = #{tombstoneEmail},
+            provider_id = '',
+            phone = NULL,
+            postcode = NULL,
+            address = NULL,
+            detail_address = NULL
+        WHERE id = #{userId}
+          AND status IN ('active', 'admin')
+    </update>
+
+    <!--함께한 일정 수(상단 요약 카드의 숫자 계산용) -->
+    <select id="getTogetherScheduleCount" parameterType="long" resultType="int">
+        SELECT COUNT(DISTINCT t.schedule_id)
+        FROM (
+                 SELECT s.id AS schedule_id
+                 FROM schedule s
+                 WHERE s.user_id = #{userId}
+                   AND s.status = 'completed'
+                   AND s.deleted_at IS NULL
+
+                 UNION
+
+                 SELECT p.schedule_id
+                 FROM participation p
+                          JOIN schedule s ON s.id = p.schedule_id
+                 WHERE p.user_id = #{userId}
+                   AND p.status = 'approved'
+                   AND s.status = 'completed'
+                   AND s.deleted_at IS NULL
+             ) t
+    </select>
+
+    <!--만난 위트 수-->
+    <select id="getMetWitCount" parameterType="long" resultType="int">
+        SELECT COUNT(DISTINCT t.wit_user_id)
+        FROM (
+                 SELECT p.user_id AS wit_user_id
+                 FROM schedule s
+                          JOIN participation p ON p.schedule_id = s.id
+                 WHERE s.user_id = #{userId}
+                   AND s.status = 'completed'
+                   AND s.deleted_at IS NULL
+                   AND p.status = 'approved'
+                   AND p.user_id &lt;&gt; #{userId}
+
+                 UNION
+
+                 SELECT s.user_id AS wit_user_id
+                 FROM participation p
+                          JOIN schedule s ON s.id = p.schedule_id
+                 WHERE p.user_id = #{userId}
+                   AND p.status = 'approved'
+                   AND s.status = 'completed'
+                   AND s.deleted_at IS NULL
+                   AND s.user_id &lt;&gt; #{userId}
+
+                 UNION
+
+                 SELECT p2.user_id AS wit_user_id
+                 FROM participation p
+                          JOIN schedule s ON s.id = p.schedule_id
+                          JOIN participation p2 ON p2.schedule_id = s.id
+                 WHERE p.user_id = #{userId}
+                   AND p.status = 'approved'
+                   AND s.status = 'completed'
+                   AND s.deleted_at IS NULL
+                   AND p2.status = 'approved'
+                   AND p2.user_id &lt;&gt; #{userId}
+             ) t
+    </select>
+</mapper>

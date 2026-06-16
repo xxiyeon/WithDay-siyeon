@@ -1,0 +1,355 @@
+.findPage {
+  min-height: calc(100vh - 180px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 20px;
+  box-sizing: border-box;
+  background-color: var(--color-bg, #f8fafb);
+}
+
+.findCard {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border: 1px solid #e4e9ef;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  transform: translateY(16px);
+}
+
+.backButton {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #7b8494;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 26px;
+}
+
+.backButton:hover {
+  color: #149e97;
+}
+
+.findHeader {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.findEyebrow {
+  margin: 0 0 8px;
+  color: #149e97;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.findTitle {
+  margin: 0;
+  color: #071224;
+  font-size: 28px;
+  line-height: 1.25;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.findSubtitle {
+  margin: 12px 0 0;
+  color: #7b8494;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+.findForm {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.resultBox {
+  text-align: center;
+}
+
+.resultIcon {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  margin: 0 auto 22px;
+  background: linear-gradient(135deg, #28c5bd, #079992);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 42px;
+  font-weight: 900;
+  box-shadow: 0 14px 28px rgba(20, 158, 151, 0.24);
+}
+
+.resultTitle {
+  margin: 0;
+  color: #071224;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.resultDesc {
+  margin: 10px 0 18px;
+  color: #7b8494;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+.emailResult {
+  border: 1px solid #dfe5ec;
+  border-radius: 12px;
+  background: #f8fafb;
+  padding: 16px 18px;
+  color: #071224;
+  font-size: 18px;
+  font-weight: 900;
+  margin-bottom: 22px;
+}
+
+.resultActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .findPage {
+    padding: 24px 20px;
+  }
+
+  .findCard {
+    padding: 32px 24px;
+    border-radius: 12px;
+    max-width: 100%;
+  }
+
+  .findTitle {
+    font-size: 25px;
+    line-height: 1.25;
+    word-break: keep-all;
+  }
+
+  .findSubtitle {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+
+  /* 아이디 찾기 안내문은 375~480px에서도 자연스럽게 2줄까지 허용 */
+  .findIdSubtitle {
+    max-width: 300px;
+  }
+
+  /* 비밀번호 찾기 안내문은 375px까지 한 줄 유지 */
+  .findPwSubtitle {
+    max-width: none;
+    white-space: nowrap;
+  }
+}
+
+/* =========================================
+   320px 초소형 모바일 대응
+   - 375px 이상 화면은 기존 디자인 유지
+   - 아이디 찾기 안내문은 자연스러운 2줄
+   - 비밀번호 찾기 안내문은 한 줄 유지
+   ========================================= */
+@media (max-width: 340px) {
+  .findPage {
+    padding: 20px 12px;
+    min-height: calc(100vh - 160px);
+  }
+
+  .findCard {
+    padding: 34px 20px 30px;
+    max-width: 100%;
+    transform: translateY(8px);
+  }
+
+  .backButton {
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+
+  .findHeader {
+    margin-bottom: 28px;
+  }
+
+  .findEyebrow {
+    font-size: 11px;
+    letter-spacing: 0.07em;
+  }
+
+  .findTitle {
+    font-size: 24px;
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+
+  .findSubtitle {
+    font-size: 12.5px;
+    line-height: 1.6;
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+
+  /*
+    아이디 찾기 문장 전용:
+    "가입 시 입력한 닉네임과 전화번호로"
+    "아이디를 찾을 수 있어요."
+    형태에 가깝게 2줄 유도
+  */
+  .findIdSubtitle {
+    max-width: 226px;
+    white-space: normal;
+  }
+
+  /*
+    비밀번호 찾기 문장 전용:
+    320px에서도 한 줄 유지
+  */
+  .findPwSubtitle {
+    max-width: none;
+    white-space: nowrap;
+    font-size: 11.5px;
+    letter-spacing: -0.02em;
+  }
+
+  .findForm {
+    gap: 17px;
+  }
+
+  .findStepBar {
+    gap: 12px;
+    margin: -6px 0 26px;
+  }
+
+  .findStepDot {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .findStepDot:not(:last-child)::after {
+    left: calc(100% + 3px);
+    width: 9px;
+  }
+
+  .resultIcon {
+    width: 70px;
+    height: 70px;
+    font-size: 38px;
+  }
+
+  .resultTitle {
+    font-size: 20px;
+    line-height: 1.3;
+    word-break: keep-all;
+  }
+
+  .resultDesc {
+    font-size: 13px;
+    word-break: keep-all;
+  }
+
+  .emailResult {
+    padding: 14px 14px;
+    font-size: 15px;
+    word-break: break-all;
+  }
+}
+
+.findStepBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin: -8px 0 28px;
+}
+
+.findStepDot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid #dfe5ec;
+  background: #ffffff;
+  color: #98a2b3;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 900;
+  position: relative;
+}
+
+.findStepDot:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: calc(100% + 4px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 2px;
+  background: #dfe5ec;
+  border-radius: 999px;
+}
+
+.findStepDotActive {
+  border-color: #149e97;
+  background: linear-gradient(135deg, #28c5bd, #079992);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(20, 158, 151, 0.22);
+}
+
+.passwordInputWrap {
+  position: relative;
+  width: 100%;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 32px;
+  height: 32px;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #7b8494;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.passwordToggle:hover {
+  color: #071224;
+}
+
+.textButton {
+  border: 0;
+  background: transparent;
+  color: #7b8494;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: -4px;
+}
+
+.textButton:hover {
+  color: #149e97;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

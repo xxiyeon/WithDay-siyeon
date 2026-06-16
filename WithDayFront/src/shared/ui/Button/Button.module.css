@@ -1,0 +1,72 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+
+  white-space: nowrap; /* 텍스트가 절대 줄바꿈되지 않고 한 줄로 나오게 고정 */
+  flex-shrink: 0; /* Flex 공간 안에서 자기 원래 크기를 잃고 쪼그라드는 걸 방지 */
+}
+
+/* ===== Size ===== */
+.sm {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.md {
+  padding: 10px 16px;
+  font-size: 14px;
+}
+
+.lg {
+  padding: 14px 20px;
+  font-size: 16px;
+}
+
+/* ===== Variant ===== */
+.primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.primary:hover {
+  background-color: var(--color-primary-light);
+  box-shadow: 0 6px 14px rgba(10, 22, 45, 0.16);
+}
+
+.accent {
+  background-color: var(--color-accent);
+  color: var(--color-text-inverse);
+}
+
+.accent:hover {
+  background-color: var(--color-accent-dark);
+  box-shadow: 0 6px 14px rgba(29, 154, 153, 0.18);
+}
+
+.outline {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.outline:hover {
+  background: var(--color-border-light);
+  border-color: var(--color-border-dark);
+  box-shadow: 0 4px 10px rgba(10, 22, 45, 0.08);
+}
+
+/* ===== State ===== */
+.fullWidth {
+  width: 100%;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

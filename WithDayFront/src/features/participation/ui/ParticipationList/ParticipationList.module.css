@@ -1,0 +1,25 @@
+.listContainer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+
+.cardWrap {
+  min-width: 0;
+}
+
+.stateBox {
+  padding: 36px 20px;
+  border-radius: 22px;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.errorState {
+  color: var(--color-error);
+  background: #fff6fa;
+  border-color: #ffd7e4;
+}

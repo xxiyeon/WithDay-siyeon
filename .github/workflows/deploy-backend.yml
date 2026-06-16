@@ -1,0 +1,457 @@
+name: Deploy Backend to EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "WithDayBack/**"
+      - ".github/workflows/deploy-backend.yml"
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set image tag
+        run: echo "IMAGE_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        working-directory: WithDayBack
+        run: |
+          set -e
+
+          echo "Build Docker image"
+          docker build -t withday-backend:${IMAGE_TAG} .
+
+          echo "Save Docker image archive"
+          docker save withday-backend:${IMAGE_TAG} -o /tmp/withday-backend-${IMAGE_TAG}.tar
+
+          echo "Check image archive"
+          ls -lh /tmp/withday-backend-${IMAGE_TAG}.tar
+
+      - name: Prepare SSH key
+        run: |
+          set -e
+
+          mkdir -p ~/.ssh
+
+          printf '%s\n' "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' > ~/.ssh/withday-key.pem
+          chmod 600 ~/.ssh/withday-key.pem
+
+          echo "Check SSH key format"
+          ssh-keygen -y -f ~/.ssh/withday-key.pem > /dev/null
+
+          echo "Add EC2 host to known_hosts"
+          ssh-keyscan -T 20 -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts || true
+
+      - name: Create .env file
+        run: |
+          cat > /tmp/withday-backend.env << EOF
+          SPRING_PROFILES_ACTIVE=prod
+          SERVER_PORT=10400
+          DB_URL=${{ secrets.DB_URL }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
+          CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
+          ONESIGNAL_APP_ID=${{ secrets.ONESIGNAL_APP_ID }}
+          ONESIGNAL_API_KEY=${{ secrets.ONESIGNAL_API_KEY }}
+          EOF
+
+      - name: Upload image archive to EC2
+        run: |
+          scp \
+            -o StrictHostKeyChecking=no \
+            -o UserKnownHostsFile=/dev/null \
+            -o ServerAliveInterval=30 \
+            -o ServerAliveCountMax=10 \
+            -o ConnectTimeout=30 \
+            -i ~/.ssh/withday-key.pem \
+            /tmp/withday-backend-${IMAGE_TAG}.tar \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/withday/withday-backend-${IMAGE_TAG}.tar
+
+      - name: Upload .env to EC2
+        run: |
+          scp \
+            -o StrictHostKeyChecking=no \
+            -o UserKnownHostsFile=/dev/null \
+            -o ServerAliveInterval=30 \
+            -o ServerAliveCountMax=10 \
+            -o ConnectTimeout=30 \
+            -i ~/.ssh/withday-key.pem \
+            /tmp/withday-backend.env \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/withday/.env
+
+      - name: Upload docker-compose.yml to EC2
+        run: |
+          scp \
+            -o StrictHostKeyChecking=no \
+            -o UserKnownHostsFile=/dev/null \
+            -o ServerAliveInterval=30 \
+            -o ServerAliveCountMax=10 \
+            -o ConnectTimeout=30 \
+            -i ~/.ssh/withday-key.pem \
+            WithDayBack/docker-compose.yml \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/withday/docker-compose.yml
+
+      - name: Deploy
+        run: |
+          ssh \
+            -o StrictHostKeyChecking=no \
+            -o UserKnownHostsFile=/dev/null \
+            -o ServerAliveInterval=30 \
+            -o ServerAliveCountMax=10 \
+            -o ConnectTimeout=30 \
+            -i ~/.ssh/withday-key.pem \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+            set -e
+
+            IMAGE_TAG="${IMAGE_TAG}"
+            IMAGE_TAR="/home/ubuntu/withday/withday-backend-\${IMAGE_TAG}.tar"
+
+            echo "========================================"
+            echo "Load Docker image"
+            echo "========================================"
+            docker load -i "\${IMAGE_TAR}"
+
+            echo "========================================"
+            echo "Tag as latest"
+            echo "========================================"
+            docker tag withday-backend:\${IMAGE_TAG} withday-backend:latest
+
+            echo "========================================"
+            echo "Restart container"
+            echo "========================================"
+            cd /home/ubuntu/withday
+            docker compose down
+            docker compose up -d
+
+            echo "========================================"
+            echo "Clean up"
+            echo "========================================"
+            rm -f "\${IMAGE_TAR}"
+            docker image prune -f
+
+            echo "========================================"
+            echo "Container status"
+            echo "========================================"
+            docker compose ps
+
+            echo "========================================"
+            echo "Health check"
+            echo "========================================"
+            sleep 10
+            curl -i --max-time 30 http://localhost:8080/api/schedules || true
+
+            echo "========================================"
+            echo "Deploy finished"
+            echo "========================================"
+          EOF
+# name: Deploy Backend to k3s
+
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - "WithDayBack/**"
+#       - ".github/workflows/deploy-backend.yml"
+
+# env:
+#   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout source code
+#         uses: actions/checkout@v4
+
+#       - name: Set image tag
+#         run: echo "IMAGE_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+#       - name: Build backend docker image on GitHub runner
+#         working-directory: WithDayBack
+#         run: |
+#           set -e
+
+#           echo "Build Docker image"
+#           docker build -t withday-backend:${IMAGE_TAG} .
+
+#           echo "Save Docker image archive"
+#           docker save withday-backend:${IMAGE_TAG} -o /tmp/withday-backend-${IMAGE_TAG}.tar
+
+#           echo "Check image archive"
+#           ls -lh /tmp/withday-backend-${IMAGE_TAG}.tar
+
+#       - name: Prepare SSH key
+#         run: |
+#           set -e
+
+#           mkdir -p ~/.ssh
+
+#           printf '%s\n' "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' > ~/.ssh/withday-key.pem
+#           chmod 600 ~/.ssh/withday-key.pem
+
+#           echo "Check SSH key format"
+#           ssh-keygen -y -f ~/.ssh/withday-key.pem > /dev/null
+
+#           echo "Add EC2 host to known_hosts"
+#           ssh-keyscan -T 20 -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts || true
+
+#       - name: Prepare remote directories
+#         run: |
+#           ssh \
+#             -o StrictHostKeyChecking=no \
+#             -o UserKnownHostsFile=/dev/null \
+#             -o ServerAliveInterval=30 \
+#             -o ServerAliveCountMax=10 \
+#             -o ConnectTimeout=30 \
+#             -i ~/.ssh/withday-key.pem \
+#             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+#             set -e
+
+#             echo "Prepare deploy directories"
+#             mkdir -p /home/ubuntu/deploy-images
+#             mkdir -p /home/ubuntu/deploy-manifests
+
+#             echo "Remove old deploy files"
+#             rm -f /home/ubuntu/deploy-images/withday-backend-*.tar
+#             rm -f /home/ubuntu/deploy-manifests/deployment.yaml
+#             rm -f /home/ubuntu/deploy-manifests/service.yaml
+
+#             echo "Disk usage"
+#             df -h
+
+#             echo "Memory usage"
+#             free -h
+#           EOF
+
+#       - name: Upload image archive to EC2
+#         run: |
+#           scp \
+#             -o StrictHostKeyChecking=no \
+#             -o UserKnownHostsFile=/dev/null \
+#             -o ServerAliveInterval=30 \
+#             -o ServerAliveCountMax=10 \
+#             -o ConnectTimeout=30 \
+#             -i ~/.ssh/withday-key.pem \
+#             /tmp/withday-backend-${IMAGE_TAG}.tar \
+#             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/deploy-images/withday-backend-${IMAGE_TAG}.tar
+
+#       - name: Upload k3s manifests to EC2
+#         run: |
+#           scp \
+#             -o StrictHostKeyChecking=no \
+#             -o UserKnownHostsFile=/dev/null \
+#             -o ServerAliveInterval=30 \
+#             -o ServerAliveCountMax=10 \
+#             -o ConnectTimeout=30 \
+#             -i ~/.ssh/withday-key.pem \
+#             WithDayBack/k8s/deployment.yaml \
+#             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/deploy-manifests/deployment.yaml
+
+#           scp \
+#             -o StrictHostKeyChecking=no \
+#             -o UserKnownHostsFile=/dev/null \
+#             -o ServerAliveInterval=30 \
+#             -o ServerAliveCountMax=10 \
+#             -o ConnectTimeout=30 \
+#             -i ~/.ssh/withday-key.pem \
+#             WithDayBack/k8s/service.yaml \
+#             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/deploy-manifests/service.yaml
+
+#       - name: Deploy image to k3s
+#         run: |
+#           ssh \
+#             -o StrictHostKeyChecking=no \
+#             -o UserKnownHostsFile=/dev/null \
+#             -o ServerAliveInterval=30 \
+#             -o ServerAliveCountMax=10 \
+#             -o ConnectTimeout=30 \
+#             -i ~/.ssh/withday-key.pem \
+#             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+#             set -e
+
+#             IMAGE_TAG="${IMAGE_TAG}"
+#             IMAGE_TAR="/home/ubuntu/deploy-images/withday-backend-${IMAGE_TAG}.tar"
+#             MANIFEST_DIR="/home/ubuntu/deploy-manifests"
+
+#             echo "========================================"
+#             echo "Before deploy system status"
+#             echo "========================================"
+#             df -h
+#             free -h
+#             uptime
+
+#             echo "========================================"
+#             echo "Check uploaded files"
+#             echo "========================================"
+#             ls -lh "\${IMAGE_TAR}"
+#             ls -lh "\${MANIFEST_DIR}/deployment.yaml"
+#             ls -lh "\${MANIFEST_DIR}/service.yaml"
+
+#             echo "========================================"
+#             echo "Check k3s service"
+#             echo "========================================"
+#             sudo systemctl is-active k3s || sudo systemctl restart k3s
+
+#             echo "Wait for k3s API server"
+#             for i in {1..12}; do
+#               if sudo k3s kubectl get nodes --request-timeout=20s > /dev/null 2>&1; then
+#                 echo "k3s API server is ready"
+#                 break
+#               fi
+
+#               echo "Waiting for k3s API server... \${i}/12"
+#               sleep 10
+
+#               if [ "\$i" = "12" ]; then
+#                 echo "k3s API server is not responding. Restart k3s."
+#                 sudo systemctl restart k3s
+#                 sleep 30
+#                 sudo k3s kubectl get nodes --request-timeout=120s
+#               fi
+#             done
+
+#             echo "========================================"
+#             echo "Ensure namespace exists"
+#             echo "========================================"
+#             sudo k3s kubectl create namespace withday \
+#               --dry-run=client -o yaml | sudo k3s kubectl apply --validate=false --request-timeout=120s -f -
+
+#             echo "========================================"
+#             echo "Import Docker image into k3s containerd"
+#             echo "========================================"
+#             sudo k3s ctr -n k8s.io images import "\${IMAGE_TAR}"
+
+#             echo "Give k3s API server recovery time after image import"
+#             sleep 20
+
+#             echo "========================================"
+#             echo "After image import system status"
+#             echo "========================================"
+#             df -h
+#             free -h
+#             uptime
+
+#             echo "========================================"
+#             echo "Check k3s API server after image import"
+#             echo "========================================"
+#             if ! sudo k3s kubectl get nodes --request-timeout=60s; then
+#               echo "k3s API server is slow after image import. Restart k3s."
+#               sudo systemctl restart k3s
+#               sleep 40
+#               sudo k3s kubectl get nodes --request-timeout=120s
+#             fi
+
+#             echo "========================================"
+#             echo "Apply Kubernetes manifests"
+#             echo "========================================"
+#             if ! sudo k3s kubectl apply --validate=false --request-timeout=120s -f "\${MANIFEST_DIR}/deployment.yaml"; then
+#               echo "Deployment apply failed. Restart k3s and retry once."
+#               sudo systemctl restart k3s
+#               sleep 40
+#               sudo k3s kubectl apply --validate=false --request-timeout=120s -f "\${MANIFEST_DIR}/deployment.yaml"
+#             fi
+
+#             if ! sudo k3s kubectl apply --validate=false --request-timeout=120s -f "\${MANIFEST_DIR}/service.yaml"; then
+#               echo "Service apply failed. Restart k3s and retry once."
+#               sudo systemctl restart k3s
+#               sleep 40
+#               sudo k3s kubectl apply --validate=false --request-timeout=120s -f "\${MANIFEST_DIR}/service.yaml"
+#             fi
+
+#             echo "========================================"
+#             echo "Update backend deployment image"
+#             echo "========================================"
+#             if ! sudo k3s kubectl set image deployment/withday-backend \
+#               backend=docker.io/library/withday-backend:\${IMAGE_TAG} \
+#               -n withday \
+#               --request-timeout=120s; then
+
+#               echo "Set image failed. Restart k3s and retry once."
+#               sudo systemctl restart k3s
+#               sleep 40
+
+#               sudo k3s kubectl set image deployment/withday-backend \
+#                 backend=docker.io/library/withday-backend:\${IMAGE_TAG} \
+#                 -n withday \
+#                 --request-timeout=120s
+#             fi
+
+#             echo "========================================"
+#             echo "Wait for deployment availability"
+#             echo "========================================"
+#             for i in {1..60}; do
+#               AVAILABLE=\$(sudo k3s kubectl get deployment withday-backend -n withday -o jsonpath='{.status.availableReplicas}' --request-timeout=30s 2>/dev/null || echo 0)
+#               UPDATED=\$(sudo k3s kubectl get deployment withday-backend -n withday -o jsonpath='{.status.updatedReplicas}' --request-timeout=30s 2>/dev/null || echo 0)
+#               READY=\$(sudo k3s kubectl get deployment withday-backend -n withday -o jsonpath='{.status.readyReplicas}' --request-timeout=30s 2>/dev/null || echo 0)
+
+#               echo "available=\${AVAILABLE:-0}, updated=\${UPDATED:-0}, ready=\${READY:-0}"
+
+#               if [ "\${AVAILABLE:-0}" = "1" ] && [ "\${UPDATED:-0}" = "1" ] && [ "\${READY:-0}" = "1" ]; then
+#                 echo "Deployment is ready"
+#                 break
+#               fi
+
+#               if [ "\$i" = "60" ]; then
+#                 echo "Deployment failed to become ready"
+
+#                 echo "Pod status"
+#                 sudo k3s kubectl get pods -n withday -o wide --request-timeout=120s || true
+
+#                 echo "Service status"
+#                 sudo k3s kubectl get svc -n withday --request-timeout=120s || true
+
+#                 echo "Recent events"
+#                 sudo k3s kubectl get events -n withday --sort-by=.metadata.creationTimestamp --request-timeout=120s | tail -80 || true
+
+#                 echo "Deployment describe"
+#                 sudo k3s kubectl describe deployment withday-backend -n withday --request-timeout=120s || true
+
+#                 echo "Backend logs"
+#                 sudo k3s kubectl logs -n withday -l app=withday-backend --tail=200 --request-timeout=120s || true
+
+#                 echo "System status"
+#                 df -h || true
+#                 free -h || true
+#                 uptime || true
+
+#                 exit 1
+#               fi
+
+#               sleep 10
+#             done
+
+#             echo "========================================"
+#             echo "Clean uploaded files"
+#             echo "========================================"
+#             rm -f "\${IMAGE_TAR}"
+
+#             echo "========================================"
+#             echo "Kubernetes status"
+#             echo "========================================"
+#             sudo k3s kubectl get pods -n withday -o wide --request-timeout=120s
+#             sudo k3s kubectl get svc -n withday --request-timeout=120s
+
+#             echo "========================================"
+#             echo "Backend API health check"
+#             echo "========================================"
+#             curl -i --max-time 30 http://localhost:8080/api/schedules || true
+
+#             echo "========================================"
+#             echo "Deploy finished"
+#             echo "========================================"
+#           EOF

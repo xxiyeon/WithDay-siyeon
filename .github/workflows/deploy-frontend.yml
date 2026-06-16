@@ -1,0 +1,65 @@
+name: Deploy Frontend to S3 and CloudFront
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "WithDayFront/**"
+      - ".github/workflows/deploy-frontend.yml"
+
+env:
+  AWS_REGION: ap-northeast-2
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: WithDayFront/package-lock.json
+
+      - name: Create frontend production env
+        working-directory: WithDayFront
+        run: |
+          cat > .env.production << EOF
+          VITE_BACKSERVER=${{ vars.VITE_BACKSERVER }}
+          VITE_GOOGLE_CLIENT_ID=${{ vars.VITE_GOOGLE_CLIENT_ID }}
+          VITE_ONESIGNAL_APP_ID=${{ vars.VITE_ONESIGNAL_APP_ID }}
+          EOF
+
+          echo "Created .env.production"
+          sed -E 's/(=).+$/=\*\*\*/' .env.production
+
+      - name: Install dependencies
+        working-directory: WithDayFront
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: WithDayFront
+        run: npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload dist to S3
+        run: |
+          aws s3 sync WithDayFront/dist s3://${{ secrets.S3_BUCKET_NAME }} --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"

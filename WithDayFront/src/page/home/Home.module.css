@@ -1,0 +1,542 @@
+.main {
+  padding: 12px 0 0;
+  background-color: var(--color-bg);
+  min-width: 0;
+}
+
+.heroSection {
+  margin-bottom: 34px;
+}
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-hero);
+}
+
+.carouselTrack {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.carouselSlide {
+  flex: 0 0 100%;
+  aspect-ratio: 4 / 1;
+}
+
+.carouselImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.carouselImageFallback {
+  object-position: center center;
+  transform: scale(1.04);
+}
+
+.carouselFooter {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.carouselTextWrap {
+  min-width: 0;
+}
+
+.carouselCaption {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+.carouselSubcaption {
+  margin: 4px 0 0;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--color-text-secondary);
+}
+
+.carouselDots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.carouselDot {
+  width: 7px;
+  height: 7px;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-border);
+  cursor: pointer;
+  transition:
+    width 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.carouselDotActive {
+  width: 18px;
+  background: var(--color-accent);
+}
+
+.section {
+  margin-bottom: 32px;
+  min-width: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.sectionTitleWrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.sectionAccent {
+  width: 4px;
+  min-height: 34px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+.sectionCaption {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.moreButton {
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.moreButton:hover {
+  color: var(--color-accent-dark);
+}
+
+.cardRail {
+  /*
+    홈은 탐색처럼 전체 그리드를 보여주지 않고, 추천 카드 몇 개를 가로 레일로 노출한다.
+    grid-auto-flow: column과 grid-auto-columns 조합으로 카드 개수가 달라도 같은 폭 규칙을 유지한다.
+  */
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(252px, 78vw);
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: visible;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 4px 2px 10px;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+}
+
+.cardRail::-webkit-scrollbar {
+  height: 8px;
+}
+
+.cardRail::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar-thumb);
+  border-radius: 999px;
+}
+
+.homeCard {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.homeEmpty {
+  padding: 28px;
+  border-radius: 24px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-panel);
+}
+
+.homeEmptyTitle {
+  margin: 0 0 8px;
+  font-size: 1.15rem;
+  color: var(--color-text-primary);
+}
+
+.homeEmptyText {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.stateBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.errorBox {
+  color: var(--color-error);
+}
+
+.loadingSpinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.noData {
+  padding: 40px 0;
+  text-align: center;
+  width: 100%;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 767px) {
+  .main {
+    padding-top: 8px;
+  }
+
+  .carouselSlide {
+    aspect-ratio: 16 / 10.5;
+  }
+
+  .carouselFooter {
+    align-items: flex-start;
+  }
+
+  .carouselCaption {
+    font-size: 0.98rem;
+  }
+
+  .sectionHeader {
+    gap: 10px;
+  }
+
+  .sectionTitle {
+    font-size: 1.45rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .cardRail {
+    /* 모바일에서는 가로 스크롤 대신 한 열 grid로 바꿔 overflow를 없앤다. */
+    grid-auto-flow: row;
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-columns: unset;
+    overflow-x: visible;
+    padding-inline: 0;
+    scroll-snap-type: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .cardRail {
+    /* 태블릿에서는 두 열 grid로 줄바꿈시켜 카드가 화면 밖으로 밀리지 않게 한다. */
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-columns: unset;
+    overflow-x: visible;
+    padding-inline: 0;
+    scroll-snap-type: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cardRail {
+    /* 데스크탑에서는 기존 가로 레일 구조를 유지한다. */
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(238px, 25%);
+  }
+}
+/* =========================
+   Home - Figma Layout
+   ========================= */
+
+.main {
+  padding: 28px 0 0;
+  background-color: #f8fafb;
+  min-width: 0;
+}
+
+.heroSection {
+  width: min(1092px, calc(100% - 48px));
+  margin: 0 auto 46px;
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 330px;
+  overflow: hidden;
+  box-shadow: none;
+  border-radius: 0;
+  background: #ffffff;
+}
+
+.carouselSlide {
+  flex: 0 0 100%;
+  height: 330px;
+  aspect-ratio: auto;
+}
+
+.carouselImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.carouselFooter {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.carouselCaption {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #0a162d;
+}
+
+.carouselSubcaption {
+  display: none;
+}
+
+.carouselDots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-top: 3px;
+}
+
+.carouselDot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: #d9d9d9;
+}
+
+.carouselDotActive {
+  width: 6px;
+  background: #1d9a99;
+}
+
+.section {
+  width: min(1092px, calc(100% - 48px));
+  margin: 0 auto 32px;
+  min-width: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.sectionTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sectionAccent {
+  width: 4px;
+  height: 35px;
+  min-height: 35px;
+  border-radius: 0;
+  background: #1d9a99;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #0a162d;
+}
+
+.sectionCaption {
+  display: none;
+}
+
+.moreButton {
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #0a162d;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cardRail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: none;
+  grid-auto-columns: 200px;
+  gap: 23px;
+
+  overflow-x: auto;
+  overflow-y: visible;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  padding: 0 0 16px;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+}
+
+.cardRail::-webkit-scrollbar {
+  height: 8px;
+}
+
+.cardRail::-webkit-scrollbar-thumb {
+  background: rgba(10, 22, 45, 0.18);
+  border-radius: 999px;
+}
+
+.homeCard {
+  width: 200px !important;
+  min-width: 200px !important;
+  max-width: 200px !important;
+  height: 250px !important;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 767px) {
+  .main {
+    padding: 16px 0 96px;
+  }
+
+  .heroSection,
+  .section {
+    width: calc(100% - 32px);
+  }
+
+  .carousel {
+    height: 210px;
+  }
+
+  .carouselSlide {
+    height: 210px;
+    aspect-ratio: auto;
+  }
+
+  .carouselCaption {
+    font-size: 13px;
+  }
+
+  .sectionTitle {
+    font-size: 17px;
+  }
+
+  .cardRail {
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: 200px;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 0 0 16px;
+    scroll-snap-type: x proximity;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .heroSection,
+  .section {
+    width: calc(100% - 48px);
+  }
+
+  .carousel {
+    height: 280px;
+  }
+
+  .carouselSlide {
+    height: 280px;
+    aspect-ratio: auto;
+  }
+
+  .cardRail {
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: 200px;
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 0 0 16px;
+    scroll-snap-type: x proximity;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cardRail {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 200px;
+    gap: 23px;
+  }
+}

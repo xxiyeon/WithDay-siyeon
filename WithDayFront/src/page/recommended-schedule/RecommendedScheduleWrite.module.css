@@ -1,0 +1,1277 @@
+.header {
+  text-align: start;
+}
+
+/* ========================= */
+/* 전체 레이아웃 */
+/* ========================= */
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 20px 120px;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.main::-webkit-scrollbar {
+  display: none;
+}
+
+.contentWrap {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ========================= */
+/* 공통 섹션 카드 */
+/* ========================= */
+
+.inputContentWrap {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #e7edf3;
+  overflow: hidden;
+  margin-bottom: 28px;
+  box-shadow: 2px 2px 5px rgba(15, 23, 42, 0.03);
+}
+
+/* 왼쪽 타이틀 영역 */
+.inputTitle {
+  margin: 0;
+  padding: 42px 32px;
+  border-right: 1px solid #edf2f7;
+
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  background: #ffffff;
+}
+
+/* 오른쪽 컨텐츠 */
+.inputContentWrap > *:not(.inputTitle) {
+  padding: 38px 40px;
+}
+
+/* ========================= */
+/* 기본 input row */
+/* ========================= */
+
+.inputWrap {
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+
+  width: 100%;
+  margin: 0 0 24px;
+  padding: 0;
+}
+
+.inputWrap:last-child {
+  margin-bottom: 0;
+}
+
+.inputWrap li {
+  box-sizing: border-box;
+}
+
+.inputWrap li:first-child {
+  width: 160px;
+  min-width: 160px;
+
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+
+  padding-top: 14px;
+}
+
+.inputWrap li:last-child {
+  flex: 1;
+}
+
+/* ========================= */
+/* input */
+/* ========================= */
+
+.inputWrap input,
+.inputWrap textarea,
+.inputWrap select {
+  width: 100%;
+  border: 1px solid #d9e2ec;
+  background: #ffffff;
+
+  border-radius: 14px;
+  padding: 16px 18px;
+
+  font-size: 15px;
+  color: #111827;
+
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.inputWrap select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding-right: 48px !important;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 14px;
+}
+
+.inputWrap input::placeholder,
+.inputWrap textarea::placeholder,
+.scheduleInput::placeholder,
+.scheduleTextarea::placeholder {
+  color: #9ca3af;
+}
+
+.inputWrap input:focus,
+.inputWrap textarea:focus,
+.inputWrap select:focus {
+  border-color: #10b8b4;
+  box-shadow: 0 0 0 4px rgba(16, 184, 180, 0.08);
+}
+
+.inputWrap textarea {
+  min-height: 180px;
+  resize: none;
+}
+
+/* ========================= */
+/* 기본정보 영역 */
+/* ========================= */
+
+.title,
+.description {
+  width: 100%;
+}
+
+/* 오른쪽 컨텐츠 */
+.sectionContent {
+  width: 100%;
+  min-width: 0;
+
+  padding: 38px 40px;
+
+  box-sizing: border-box;
+}
+
+.title,
+.description {
+  width: 100%;
+}
+
+.inputContentWrap:first-of-type {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+}
+
+.inputContentWrap:first-of-type > ul {
+  margin-bottom: 20px;
+}
+
+.inputContentWrap:first-of-type > ul:nth-child(n + 4) {
+  display: inline-flex;
+}
+
+.inputWrap li:last-child {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ========================= */
+/* 인원 정보 */
+/* ========================= */
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px 28px;
+}
+
+.peopleInfo {
+  margin-bottom: 0;
+}
+
+.peopleInfo li:last-child {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.peopleField > div {
+  width: 100%;
+  flex: 1;
+}
+
+.peopleInfo input {
+  text-align: center;
+  width: 100%;
+  flex: 1;
+}
+
+.peopleInfo span {
+  font-weight: 600;
+  color: #475467;
+}
+
+/* ========================= */
+/* 성별 버튼 */
+/* ========================= */
+
+.genderInfo {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+}
+
+.genderInfo li:last-child {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ========================= */
+/* 상세 일정 */
+/* ========================= */
+
+.scheduleSection {
+  width: 100%;
+}
+
+.scheduleAddRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 18px;
+}
+
+.scheduleTimeline {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* 카드 */
+.scheduleCard {
+  position: relative;
+
+  display: flex;
+  gap: 18px;
+
+  background: #ffffff;
+  border: 1px solid #e5edf3;
+  border-radius: 22px;
+
+  padding: 18px;
+
+  z-index: 1;
+}
+
+/* 일차 뱃지 */
+.dayBadge {
+  min-width: 80px;
+  width: 80px;
+  height: 110px;
+
+  border-radius: 14px;
+
+  background: var(--color-accent-light);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.dayBadge span {
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1;
+
+  color: #0ea5a4;
+}
+
+.dayBadge p {
+  margin: 6px 0 0;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #0ea5a4;
+}
+
+/* 오른쪽 */
+.scheduleContent {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.scheduleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scheduleHeader strong {
+  color: #111827;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.scheduleDeleteButton {
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+
+  width: 32px;
+  height: 32px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+}
+
+.scheduleDeleteButton:hover {
+  background: rgba(236, 74, 154, 0.12);
+  color: #ec4a9a;
+}
+
+.scheduleField {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.scheduleField label {
+  width: 40px;
+  min-width: 40px;
+
+  padding-top: 14px;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+/* input */
+.scheduleInput,
+.scheduleTextarea {
+  width: 100%;
+
+  border: 1px solid #dbe5ec;
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  padding: 14px 16px;
+
+  font-size: 15px;
+  color: #111827;
+
+  outline: none;
+  box-sizing: border-box;
+
+  transition: 0.2s;
+}
+
+.scheduleInput:focus,
+.scheduleTextarea:focus {
+  border-color: #10b8b4;
+  box-shadow: 0 0 0 4px rgba(16, 184, 180, 0.08);
+}
+
+.textareaWrap {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.textCount {
+  margin-top: 6px;
+
+  display: flex;
+  justify-content: flex-end;
+
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.scheduleTextarea {
+  min-height: 90px;
+  resize: none;
+}
+
+/* ========================= */
+/* 정산 영역 */
+/* ========================= */
+
+.costWrap,
+.costSharingWrap {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  width: 100%;
+  margin: 18px 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+/* 왼쪽 라벨 */
+.costWrap li:first-child,
+.costSharingWrap li:first-child {
+  width: 120px;
+  min-width: 120px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+}
+
+/* 오른쪽 영역 */
+.costWrap li:last-child,
+.costSharingWrap li:last-child {
+  flex: 1;
+}
+
+/* ========================= */
+/* 공통 */
+/* ========================= */
+
+.costWrap,
+.costSharingWrap {
+  align-items: center;
+}
+
+.costWrap > li:first-child,
+.costSharingWrap > li:first-child {
+  width: 140px;
+  min-width: 140px;
+
+  display: flex;
+  align-items: center;
+
+  font-weight: 600;
+  color: #374151;
+}
+
+/* 핵심 */
+.costWrap > li:last-child,
+.costSharingWrap > li:last-child {
+  flex: 1;
+  width: 100%;
+}
+
+/* ========================= */
+/* 총액 input */
+/* ========================= */
+
+.cost {
+  width: 100%;
+  height: 64px;
+
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: #ffffff;
+  border-radius: 18px;
+
+  box-sizing: border-box;
+}
+
+.costInput {
+  width: 100%;
+  flex: 1;
+
+  border: none;
+  outline: none;
+  background: transparent;
+
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.costInput::-webkit-outer-spin-button,
+.costInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.won {
+  flex-shrink: 0;
+
+  font-size: 18px;
+  font-weight: 700;
+  color: #6b7280;
+}
+
+/* ========================= */
+/* 정산 버튼 */
+/* ========================= */
+
+.costSharingContent {
+  width: 100%;
+}
+
+.costSharing {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.costSharing button {
+  width: 100%;
+  min-height: 120px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  padding: 20px !important;
+
+  border-radius: 20px !important;
+
+  transition: 0.2s ease;
+}
+
+/* 버튼 제목 */
+.costSharing button > span,
+.costSharing button {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* 설명 */
+.desc {
+  margin-top: 10px;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  line-height: 1.5;
+  opacity: 0.65;
+}
+
+/* ========================= */
+/* 이미지 */
+/* ========================= */
+
+.imageZone {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dropZone {
+  width: 100%;
+  height: 180px;
+
+  border: 2px dashed #cbd5e1;
+  border-radius: 20px;
+
+  background: #f8fafc;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 15px;
+  font-weight: 600;
+  color: #64748b;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropZone:hover {
+  border-color: #10b8b4;
+  background: #f0fdfd;
+}
+
+.previewGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.imageWrap {
+  position: relative;
+}
+
+.image {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+
+  border-radius: 18px;
+}
+
+.deleteBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  width: 32px;
+  height: 32px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(15, 23, 42, 0.75);
+  color: white;
+
+  cursor: pointer;
+}
+
+/* ========================= */
+/* 버튼 */
+/* ========================= */
+
+.registButtonWrap {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+
+  margin-top: 40px;
+}
+
+.errorInput {
+  border: 1px solid #ff4d4f !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.12);
+}
+
+.errorText {
+  font-size: 12px;
+  color: #ff4d4f;
+  margin-top: 6px;
+  line-height: 1.4;
+  letter-spacing: -0.2px;
+}
+
+@media (max-width: 768px) {
+  .errorText {
+    font-size: 12px;
+    margin-top: 8px;
+    padding-left: 2px;
+    color: #ff4d4f;
+    word-break: keep-all;
+  }
+}
+
+/* ========================= */
+/* 반응형 */
+/* ========================= */
+
+@media (max-width: 1200px) {
+  .main {
+    padding: 20px 16px 100px;
+  }
+
+  .contentWrap {
+    max-width: 100%;
+  }
+
+  .inputContentWrap {
+    grid-template-columns: 180px 1fr;
+
+    border-radius: 20px;
+  }
+
+  .inputTitle {
+    padding: 32px 24px;
+
+    font-size: 24px;
+  }
+
+  .sectionContent,
+  .inputContentWrap > *:not(.inputTitle) {
+    padding: 28px 24px;
+  }
+
+  .inputWrap {
+    gap: 16px;
+  }
+
+  .inputWrap li:first-child {
+    width: 120px;
+    min-width: 120px;
+
+    font-size: 14px;
+  }
+
+  .inputWrap input,
+  .inputWrap textarea,
+  .inputWrap select,
+  .scheduleInput,
+  .scheduleTextarea {
+    padding: 14px 16px;
+
+    font-size: 14px;
+  }
+
+  .inputWrap select {
+    padding-right: 42px;
+    background-position: right 14px center;
+  }
+
+  .gridContainer {
+    gap: 18px;
+  }
+
+  .scheduleCard {
+    padding: 16px;
+  }
+
+  .dayBadge {
+    width: 72px;
+    min-width: 72px;
+    height: 96px;
+  }
+
+  .dayBadge span {
+    font-size: 34px;
+  }
+
+  .dayBadge p {
+    font-size: 16px;
+  }
+
+  .scheduleField label {
+    width: 36px;
+    min-width: 36px;
+
+    font-size: 14px;
+  }
+
+  .costWrap,
+  .costSharingWrap {
+    gap: 18px;
+  }
+
+  .costWrap > li:first-child,
+  .costSharingWrap > li:first-child {
+    width: 110px;
+    min-width: 110px;
+
+    font-size: 14px;
+  }
+
+  .cost {
+    width: 100%;
+
+    box-sizing: border-box;
+  }
+
+  .costInput {
+    font-size: 18px;
+  }
+
+  .won {
+    font-size: 16px;
+  }
+
+  .costSharing {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .costSharing button {
+    min-height: 110px;
+
+    padding: 18px !important;
+  }
+
+  .costSharing button > span,
+  .costSharing button {
+    font-size: 15px;
+  }
+
+  .desc {
+    font-size: 12px;
+  }
+
+  .previewGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .image {
+    height: 220px;
+  }
+
+  .registButtonWrap {
+    gap: 12px;
+  }
+
+  .registButtonWrap button {
+    min-height: 52px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 10px 10px 80px;
+  }
+
+  .contentWrap {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .inputContentWrap {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100%;
+
+    border-radius: 18px;
+    margin-bottom: 16px;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+  }
+
+  .inputContentWrap:first-of-type {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: unset !important;
+  }
+
+  .inputTitle {
+    width: 100%;
+
+    padding: 18px 16px;
+
+    border-right: none;
+    border-bottom: 1px solid #edf2f7;
+
+    font-size: 20px;
+
+    box-sizing: border-box;
+  }
+
+  .sectionContent,
+  .inputContentWrap > *:not(.inputTitle) {
+    width: 100%;
+    min-width: 0;
+
+    padding: 16px;
+
+    box-sizing: border-box;
+  }
+
+  .inputWrap {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+
+    margin-bottom: 16px;
+
+    box-sizing: border-box;
+  }
+
+  .inputWrap:last-child {
+    margin-bottom: 0;
+  }
+
+  .inputWrap li:first-child {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    padding-top: 0;
+
+    font-size: 14px;
+
+    box-sizing: border-box;
+  }
+
+  .inputWrap li:last-child {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    flex: 1 1 auto !important;
+
+    box-sizing: border-box;
+  }
+
+  .category,
+  .region,
+  .detailRegion,
+  .link,
+  .title,
+  .description,
+  .duration,
+  .peopleInfo,
+  .genderInfo,
+  .costWrap,
+  .costSharingWrap {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    flex: 1 1 auto !important;
+
+    box-sizing: border-box;
+  }
+
+  .inputWrap input,
+  .inputWrap textarea,
+  .inputWrap select,
+  .scheduleInput,
+  .scheduleTextarea,
+  .costInput {
+    width: 100% !important;
+    min-width: 0;
+
+    padding: 14px;
+
+    font-size: 14px;
+
+    box-sizing: border-box;
+  }
+
+  .inputWrap textarea {
+    min-height: 140px;
+  }
+
+  .gridContainer {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+  }
+
+  .peopleField {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .peopleField > div {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .peopleInfo {
+    margin-bottom: 0;
+  }
+
+  .peopleInfo li:last-child {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+  }
+
+  .peopleField input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .genderInfo li:last-child {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .genderInfo button {
+    width: 100%;
+  }
+
+  .scheduleAddRow {
+    justify-content: stretch;
+  }
+
+  .scheduleAddRow button {
+    width: 100%;
+  }
+
+  .scheduleCard {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 14px;
+
+    gap: 14px;
+
+    box-sizing: border-box;
+  }
+
+  .dayBadge {
+    width: 100%;
+    min-width: 0;
+
+    height: auto;
+
+    padding: 12px;
+
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+
+    gap: 6px;
+
+    box-sizing: border-box;
+  }
+
+  .dayBadge span {
+    font-size: 24px;
+  }
+
+  .dayBadge p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .scheduleContent {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .scheduleField {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+  }
+
+  .scheduleField label {
+    width: auto;
+    min-width: 0;
+
+    padding-top: 0;
+  }
+
+  .textareaWrap {
+    width: 100%;
+  }
+
+  .costWrap,
+  .costSharingWrap {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 10px;
+  }
+
+  .costWrap > li:first-child,
+  .costSharingWrap > li:first-child {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .costWrap > li:last-child,
+  .costSharingWrap > li:last-child {
+    width: 100% !important;
+  }
+
+  .cost {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .costSharing {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .costSharing button {
+    width: 100%;
+
+    min-height: 90px;
+  }
+
+  .previewGrid {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+  }
+
+  .image {
+    height: 220px;
+  }
+
+  .registButtonWrap {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .registButtonWrap button {
+    width: 100%;
+  }
+
+  .costWrap li:last-child {
+    width: 100% !important;
+
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  .costWrap {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .costWrap .cost {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    flex: unset !important;
+
+    box-sizing: border-box;
+  }
+
+  .costWrap .costInput {
+    width: 100%;
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* ========================= */
+/* 추천 일정 상세 일정 잘림 방지 */
+/* ========================= */
+
+.main {
+  box-sizing: border-box;
+}
+
+.contentWrap {
+  width: min(1400px, 100%);
+  box-sizing: border-box;
+}
+
+.inputContentWrap {
+  grid-template-columns: 240px minmax(0, 1fr);
+}
+
+.inputContentWrap > *:not(.inputTitle) {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.scheduleSection {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.scheduleAddRow {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-right: 0;
+}
+
+.scheduleAddRow button {
+  flex-shrink: 0;
+  max-width: 100%;
+}
+
+.scheduleTimeline {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.scheduleCard {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.scheduleContent {
+  min-width: 0;
+}
+
+.scheduleField {
+  min-width: 0;
+}
+
+.scheduleField input,
+.scheduleField textarea {
+  min-width: 0;
+}
+
+.imageGuideText {
+  margin: -6px 0 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}

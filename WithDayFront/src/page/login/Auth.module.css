@@ -1,0 +1,1364 @@
+/* =========================================
+   [공통 & 로그인 전용]
+   - Login.jsx에서 기존에 사용하던 클래스는 유지
+   - 색상은 App.module.css의 :root 팔레트 변수 기준으로 통일
+   ========================================= */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-bg);
+  padding: 24px 20px;
+  min-height: calc(100vh - 180px);
+  box-sizing: border-box;
+}
+
+.card {
+  background: var(--color-surface);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 480px;
+  transform: translateY(16px);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.title {
+  font-size: 24px;
+  color: var(--color-text-primary);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.linkText {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.linkClickable {
+  cursor: pointer;
+  text-decoration: underline;
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.linkClickable:hover {
+  color: var(--color-accent-dark);
+}
+
+.inputRow {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.inputRowCenter {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.flex1 {
+  flex: 1;
+  min-width: 0;
+}
+
+.inputRow .flex1,
+.inputRowCenter .flex1 {
+  display: flex;
+}
+
+.inputRow input,
+.inputRowCenter input {
+  width: 100%;
+  height: 38px;
+  min-height: 38px;
+  box-sizing: border-box;
+}
+
+.marginBottom8 {
+  margin-bottom: 8px;
+}
+
+.errorText {
+  color: var(--color-error);
+  font-size: 12.5px;
+  margin-top: 5px;
+  font-weight: 700;
+  width: 100%;
+}
+
+.successText {
+  color: var(--color-success);
+  font-size: 13px;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.pwInputWrap {
+  position: relative;
+  width: 100%;
+}
+
+.pwIcon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-default);
+}
+
+.pwIcon:hover {
+  color: var(--color-text-primary);
+}
+
+.termPre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  padding: 10px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.checkboxText {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.findLinks {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 9px;
+  margin-top: -10px;
+  margin-bottom: 2px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.findLinks span {
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    text-decoration-color var(--transition-fast);
+}
+
+.findLinks span:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.findDivider {
+  color: var(--color-border-dark);
+  cursor: default !important;
+}
+
+.findDivider:hover {
+  color: var(--color-border-dark) !important;
+  text-decoration: none !important;
+}
+
+.googleLoginWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border-light);
+}
+
+/* =========================================
+   [회원가입 & 소셜 가입 공용] 피그마 스타일
+   - 기존 디자인 유지
+   - 내부 색상 변수는 App.module.css 팔레트에 연결
+   ========================================= */
+.signupPage {
+  --wd-navy: var(--color-primary);
+  --wd-navy-soft: var(--color-primary-light);
+  --wd-main: var(--color-accent);
+  --wd-main-dark: var(--color-accent-dark);
+  --wd-main-light: var(--color-accent-light);
+  --wd-border: var(--color-border);
+  --wd-border-strong: var(--color-border-dark);
+  --wd-muted: var(--color-text-muted);
+  --wd-text: var(--color-text-primary);
+  --wd-bg: var(--color-bg);
+  --wd-card: var(--color-surface);
+
+  min-height: calc(100vh - 120px);
+  background: var(--color-bg);
+  color: var(--wd-text);
+  padding: 56px 22px 34px;
+  box-sizing: border-box;
+}
+
+.signupMain {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 760px) minmax(320px, 430px);
+  gap: 46px;
+  align-items: stretch;
+}
+
+.formSection {
+  min-width: 0;
+}
+
+.formCard {
+  width: 100%;
+  min-height: 710px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: 22px;
+  box-shadow: var(--shadow-hero);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.signupStepper,
+.signupStepperSocial {
+  display: grid;
+  gap: 10px;
+  padding: 38px 54px 20px;
+  flex-shrink: 0;
+}
+
+.signupStepper {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.signupStepperSocial {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.signupStep {
+  position: relative;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.signupStep:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 17px;
+  left: calc(50% + 24px);
+  width: calc(100% - 38px);
+  height: 2px;
+  background: var(--color-border-light);
+  border-radius: 999px;
+}
+
+.signupStepDone:not(:last-child)::after {
+  background: var(--wd-main);
+}
+
+.signupStepNumber {
+  position: relative;
+  z-index: 1;
+  width: 38px;
+  height: 38px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 16px;
+  font-weight: 800;
+  box-shadow: var(--shadow-sm);
+}
+
+.signupStepActive,
+.signupStepDone {
+  color: var(--wd-main);
+}
+
+.signupStepActive .signupStepNumber,
+.signupStepDone .signupStepNumber {
+  color: var(--color-text-inverse);
+  border-color: var(--wd-main);
+  background: linear-gradient(135deg, var(--wd-main), var(--wd-main-dark));
+  box-shadow: var(--shadow-lg);
+}
+
+.signupStepDone .signupStepNumber span {
+  display: none;
+}
+
+.signupStepDone .signupStepNumber::before {
+  content: "✓";
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.signupStepLabel {
+  word-break: keep-all;
+  line-height: 1.3;
+}
+
+.signupForm {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.flowSection {
+  flex: 1;
+  padding: 22px 54px 26px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.flowHeroCenter {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.flowTitle,
+.completeTitle {
+  margin: 0;
+  color: var(--wd-navy);
+  font-size: 34px;
+  line-height: 1.22;
+  letter-spacing: -0.04em;
+  font-weight: 900;
+}
+
+.flowDescription {
+  margin: 12px 0 0;
+  color: var(--wd-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+/* 약관 */
+.termCard,
+.termRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid var(--wd-border);
+  background: var(--color-surface);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.termCardAll {
+  min-height: 80px;
+  padding: 18px 24px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+
+.termCard:hover,
+.termRow:hover {
+  border-color: var(--color-accent);
+  background: var(--color-surface-hover);
+}
+
+.checkBoxWrap {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+}
+
+.checkBoxNative {
+  width: 28px;
+  height: 28px;
+  accent-color: var(--wd-main);
+  cursor: pointer;
+}
+
+.termTextArea {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.termTitle {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--wd-navy);
+}
+
+.termDesc {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.termList {
+  border: 1px solid var(--wd-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.termRow {
+  position: relative;
+  min-height: 62px;
+  padding: 10px 18px 10px 24px;
+  border-width: 0 0 1px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.termRow:last-child {
+  border-bottom: 0;
+}
+
+.termRowTitle {
+  flex: 1;
+  min-width: 0;
+  color: var(--wd-navy);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.termRowTitle b {
+  color: var(--wd-main);
+}
+
+.termViewButton {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+  padding: 8px 0 8px 12px;
+}
+
+.termViewButton:hover {
+  color: var(--wd-main-dark);
+}
+
+.termError {
+  flex-basis: 100%;
+  margin-left: 50px;
+  color: var(--color-error);
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+.noticeText {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 2px 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.noticeText::before {
+  content: "ⓘ";
+  color: var(--color-text-muted);
+}
+
+/* 폼 필드 */
+.accountFields,
+.basicFields,
+.socialBasicFields {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.accountFields {
+  width: min(560px, 100%);
+  margin: 0 auto;
+}
+
+.profileGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 30px;
+  align-items: start;
+}
+
+.basicFields {
+  min-width: 0;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.formRowLabel {
+  padding-top: 11px;
+  color: var(--wd-navy);
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.formControlArea {
+  min-width: 0;
+}
+
+.authInputWrap,
+.passwordInputWrap {
+  position: relative;
+  width: 100%;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.passwordToggle:hover {
+  color: var(--color-text-primary);
+}
+
+.timerText {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--wd-main);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.inlineActionButton {
+  flex: 0 0 104px;
+  min-width: 104px;
+  height: 38px;
+  min-height: 38px;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 13px;
+  padding: 0 14px;
+}
+
+.hintLine {
+  margin: 8px 0 0;
+  color: var(--color-text-muted);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.segmentGroup {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.segmentItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border: 1px solid var(--wd-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.segmentItem input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.segmentItem:has(input:checked) {
+  border-color: var(--wd-main);
+  background: var(--wd-main-light);
+  color: var(--wd-main-dark);
+  box-shadow: inset 0 0 0 1px var(--color-surface-highlight);
+}
+
+.addressStack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.photoUploadBox {
+  min-height: 276px;
+  border: 1.5px dashed var(--color-border);
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--color-surface), var(--color-bg));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.photoUploadBox:hover {
+  border-color: var(--wd-main);
+  background: var(--color-surface-hover);
+}
+
+.fileInputHidden {
+  display: none !important;
+}
+
+.photoIcon {
+  width: 70px;
+  height: 70px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--wd-border);
+  background: var(--color-bg);
+  font-size: 30px;
+}
+
+.photoPreviewFrame {
+  width: 96px;
+  height: 96px;
+  display: block;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--color-accent-light);
+  box-shadow: var(--shadow-lg);
+  background: var(--color-bg);
+}
+
+.photoPreviewFrame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photoUploadBox strong {
+  color: var(--wd-navy);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.photoUploadBox span:not(.photoIcon) {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.photoUploadBox small {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.photoUploadBox em {
+  min-width: 112px;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border-dark);
+  border-radius: 8px;
+  color: var(--wd-navy);
+  font-style: normal;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+/* 관심사 */
+.interestGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.interestButton {
+  min-height: 58px;
+  border: 1.5px solid var(--wd-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 900;
+  transition: all var(--transition-fast);
+}
+
+.interestButton:hover {
+  border-color: var(--wd-main);
+  transform: translateY(-1px);
+}
+
+.interestButtonActive {
+  border-color: var(--wd-main);
+  background: var(--color-surface-highlight);
+  color: var(--wd-main-dark);
+  box-shadow: inset 0 0 0 1px var(--color-surface-highlight);
+}
+
+.interestIcon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.selectedInterestBox {
+  margin-top: 22px;
+  border: 1px solid var(--wd-border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  background: var(--color-surface);
+}
+
+.selectedInterestHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.selectedInterestHead strong {
+  color: var(--wd-navy);
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.selectedInterestHead button {
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.selectedInterestHead button:hover {
+  color: var(--color-accent);
+}
+
+.selectedPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.selectedPill {
+  border: 1px solid var(--color-accent);
+  background: var(--color-accent-light);
+  color: var(--wd-main-dark);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.selectedPill span {
+  margin-left: 6px;
+}
+
+.selectedEmpty,
+.emptyText {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* 완료 */
+.completeSection {
+  justify-content: center;
+}
+
+.completeTitle {
+  font-size: 40px;
+}
+
+.completeVisual {
+  height: 178px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  color: var(--color-warning);
+  margin-bottom: 28px;
+}
+
+.completeCheck {
+  width: 138px;
+  height: 138px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--wd-main), var(--wd-main-dark));
+  color: var(--color-text-inverse);
+  display: grid;
+  place-items: center;
+  font-size: 76px;
+  font-weight: 900;
+  box-shadow: var(--shadow-hero);
+}
+
+.confettiMark {
+  font-size: 28px;
+  color: var(--color-accent);
+}
+
+.completePanel {
+  width: min(560px, calc(100% - 48px));
+  margin: 0 auto;
+  border: 1px solid var(--wd-border);
+  border-radius: 16px;
+  padding: 22px 24px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  background: var(--color-surface);
+  box-sizing: border-box;
+}
+
+.autoRedirectText {
+  width: min(620px, 100%);
+  margin: 18px auto 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 800;
+  text-align: center;
+  animation: redirectPulse 1.45s ease-in-out infinite;
+}
+
+@keyframes redirectPulse {
+  0% {
+    opacity: 0.58;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.58;
+  }
+}
+
+.completePanelIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--wd-main-light);
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+}
+
+.completePanel strong {
+  color: var(--wd-navy);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.completePanel p {
+  margin: 8px 0 0;
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+/* 하단 액션 */
+.signupActions {
+  min-height: 92px;
+  margin-top: auto;
+  padding: 18px 54px 22px;
+  border-top: 1px solid var(--wd-border);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: center;
+  background: var(--color-surface);
+}
+
+.prevButton,
+.nextButton {
+  height: 54px;
+  justify-self: stretch;
+  width: 100%;
+}
+
+.backToLoginButton {
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: left;
+}
+
+.backToLoginButton:hover {
+  color: var(--color-accent);
+}
+
+/* 우측 이미지 */
+.imageSection {
+  position: relative;
+  min-height: 710px;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bgImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: var(--shadow-card-ticket-hover);
+  filter: drop-shadow(0 18px 28px rgba(7, 18, 36, 0.08));
+}
+
+/* 하단 신뢰 카드 */
+.trustSection {
+  width: min(1180px, 100%);
+  margin: 28px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(223, 229, 236, 0.8);
+  border-radius: 18px;
+  box-shadow: 0 12px 34px rgba(7, 18, 36, 0.06);
+  overflow: hidden;
+}
+
+.trustCard {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 28px 34px;
+  position: relative;
+}
+
+.trustCard:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 28%;
+  width: 1px;
+  height: 44%;
+  background: #d8e0e8;
+}
+
+.trustCard span {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--wd-main-light);
+  display: grid;
+  place-items: center;
+  color: var(--wd-main);
+  font-size: 25px;
+  flex-shrink: 0;
+}
+
+.trustCard strong {
+  color: var(--wd-navy);
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.trustCard p {
+  margin: 7px 0 0;
+  color: #7b8494;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* 반응형 */
+@media (max-width: 1100px) {
+  .signupMain {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .imageSection {
+    min-height: 250px;
+    order: 2;
+  }
+
+  .formSection {
+    order: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .signupPage {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .formCard {
+    min-height: auto;
+  }
+
+  .profileGrid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .photoUploadBox {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .formRow {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .accountFields,
+  .basicFields,
+  .socialBasicFields {
+    width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .signupPage {
+    padding: 18px 12px 24px;
+  }
+
+  .formCard {
+    min-height: auto;
+    border-radius: 18px;
+  }
+
+  .signupStepper,
+  .signupStepperSocial {
+    padding: 28px 18px 10px;
+    gap: 4px;
+  }
+
+  .signupStep {
+    font-size: 12px;
+  }
+
+  .signupStepNumber {
+    width: 42px;
+    height: 42px;
+    font-size: 17px;
+    margin-bottom: 11px;
+  }
+
+  .signupStep:not(:last-child)::after {
+    top: 20px;
+    left: calc(50% + 26px);
+    width: calc(100% - 28px);
+  }
+
+  .flowSection {
+    padding: 20px 18px 22px;
+  }
+
+  .flowTitle {
+    font-size: 30px;
+  }
+
+  .flowDescription {
+    font-size: 14px;
+  }
+
+  .termCardAll {
+    padding: 16px 18px;
+  }
+
+  .termRow {
+    min-height: auto;
+    padding: 13px 12px 13px 14px;
+    gap: 10px;
+  }
+
+  .termRowTitle {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .termViewButton {
+    display: inline-flex;
+    font-size: 12px;
+    padding-left: 4px;
+  }
+
+  .termError {
+    margin-left: 42px;
+    font-size: 10px;
+  }
+
+  .profileGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .formRowLabel {
+    padding-top: 0;
+  }
+
+  .photoUploadBox {
+    min-height: 190px;
+  }
+
+  .photoPreviewFrame {
+    width: 84px;
+    height: 84px;
+  }
+
+  .interestGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .interestButton {
+    min-height: 56px;
+    font-size: 15px;
+  }
+
+  .signupActions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 16px 18px 18px;
+  }
+
+  .prevButton,
+  .nextButton {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .backToLoginButton {
+    font-size: 14px;
+  }
+
+  .imageSection {
+    min-height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signupPage {
+    padding: 12px 10px 20px;
+  }
+
+  .signupStepper,
+  .signupStepperSocial {
+    padding: 24px 10px 8px;
+  }
+
+  .signupStepLabel {
+    font-size: 11px;
+  }
+
+  .signupStepNumber {
+    width: 38px;
+    height: 38px;
+    font-size: 16px;
+  }
+
+  .flowSection {
+    padding: 18px 14px 20px;
+  }
+
+  .flowTitle,
+  .completeTitle {
+    font-size: 28px;
+  }
+
+  .inputRow,
+  .inputRowCenter {
+    gap: 8px;
+  }
+
+  .inputRow input,
+  .inputRowCenter input {
+    height: 38px;
+    min-height: 38px;
+  }
+
+  .inlineActionButton {
+    flex-basis: 84px;
+    min-width: 84px;
+    height: 38px;
+    min-height: 38px;
+    font-size: 12px;
+    padding: 0 10px;
+  }
+
+  .segmentGroup {
+    grid-template-columns: 1fr;
+  }
+
+  .interestGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .selectedInterestHead {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .signupActions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .photoPreviewFrame {
+    width: 78px;
+    height: 78px;
+  }
+
+  .completeCheck {
+    width: 112px;
+    height: 112px;
+    font-size: 62px;
+  }
+
+  .completeVisual {
+    height: 145px;
+  }
+
+  .completePanel {
+    width: 100%;
+    padding: 20px;
+    align-items: flex-start;
+  }
+}
+
+/* =========================================
+   [로그인 320px 초소형 모바일 대응]
+   - 375px 이상 디자인은 유지
+   - 320px 화면에서 카드 내부 폭이 부족해 제목/문구가 줄바꿈되는 현상만 보정
+   ========================================= */
+@media (max-width: 340px) {
+  .container {
+    padding: 20px 12px;
+    min-height: calc(100vh - 160px);
+  }
+
+  .card {
+    box-sizing: border-box;
+    padding: 36px 24px 30px;
+    max-width: 100%;
+    transform: translateY(8px);
+  }
+
+  .header {
+    margin-bottom: 28px;
+  }
+
+  .title {
+    font-size: 23px;
+    line-height: 1.25;
+    white-space: nowrap;
+    word-break: keep-all;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    line-height: 1.45;
+    word-break: keep-all;
+  }
+
+  .form {
+    gap: 18px;
+  }
+
+  .findLinks {
+    font-size: 12.5px;
+    gap: 8px;
+  }
+
+  .checkboxText {
+    font-size: 13px;
+  }
+
+  .googleLoginWrap {
+    margin-top: 22px;
+    padding-top: 22px;
+  }
+
+  .linkText {
+    margin-top: 22px;
+    font-size: 13px;
+    word-break: keep-all;
+  }
+}

@@ -1,0 +1,255 @@
+/* 내 일정 페이지 상단 탭 네비게이션 영역 */
+.tabWrap {
+  display: flex;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 16px;
+}
+
+/* 탭 버튼 기본 상태: 선택 전에는 중립 톤으로 두고 active에서만 강조한다. */
+.tabBtn {
+  flex: 1;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #888;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+/* 현재 선택된 탭 텍스트 강조 */
+.active {
+  color: #333;
+  font-weight: 700;
+}
+
+/* 활성 탭 하단 인디케이터 */
+.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #8a5cf5;
+}
+
+/* 카드 리스트 세로 배치 영역. 하단 네비와 겹치지 않도록 충분한 bottom padding을 둔다. */
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 로딩/에러/빈 상태 메시지를 공통 스타일로 보여주는 박스 */
+.stateBox {
+  text-align: center;
+  padding: 50px 0;
+  color: #999;
+  font-size: 14px;
+}
+
+/* 오류 메시지 전용 색상 */
+.errorState {
+  color: #e03131;
+}
+
+/* 내 일정 카드의 기본 외형 */
+.card {
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+/* 종료되었거나 액션이 제한된 카드의 시각적 비활성 상태 */
+.cardDisabled {
+  opacity: 0.6;
+  background-color: #f8f9fa;
+}
+
+/* 비활성 카드에서는 제목도 흐리게 보여 상태 차이를 더 분명히 한다. */
+.cardDisabled .cardTitle {
+  color: #868e96;
+  text-decoration: line-through;
+}
+
+/* 카드 상단: 태그 묶음과 위치 정보 정렬 */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* 카테고리/D-day/상태 배지 묶음 */
+.tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* 일정 카테고리 배지 */
+.categoryBadge {
+  background-color: #f0edff;
+  color: #8a5cf5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* 일정 D-day 배지 */
+.dDayBadge {
+  background-color: #f0f4f8;
+  color: #5c7cf5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* 모집중/진행중/종료 같은 일정 phase 배지 */
+.phaseBadge {
+  background-color: #e7f5ff;
+  color: #1c7ed6;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* 지역 정보 한 줄 표시 */
+.location {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* 카드 본문 영역 */
+.cardBody {
+  margin-bottom: 16px;
+}
+
+/* 카드 제목 */
+.cardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 8px 0;
+}
+
+/* 날짜 표시 줄 */
+.cardDate {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* 헤더와 푸터를 분리하는 구분선 */
+.divider {
+  height: 1px;
+  background-color: #f0f0f0;
+  margin: 0 -16px 12px -16px;
+}
+
+/* 카드 하단: 인원 정보와 액션 버튼 배치 */
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 모집 인원 텍스트 */
+.peopleInfo {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* 아이콘이 줄어들지 않도록 고정 */
+.inlineIcon {
+  flex-shrink: 0;
+}
+
+/* 숫자 강조 텍스트 */
+.highlight {
+  color: #8a5cf5;
+  font-weight: 700;
+}
+
+/* 기본 액션 버튼 스타일 */
+.actionBtn {
+  background-color: #8a5cf5;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* hover 시 상호작용 강조 */
+.actionBtn:hover {
+  background-color: #7241eb;
+}
+
+/* disabled에 가까운 중립 액션 버튼 스타일 */
+.pendingBtn {
+  background-color: #f1f3f5;
+  color: #495057;
+}
+
+/* 중립 버튼 hover */
+.pendingBtn:hover {
+  background-color: #e9ecef;
+}
+
+/* 상태 배지 공통 모양 */
+.statusBadge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* 호스트 배지 */
+.badgeHost {
+  background-color: #333;
+  color: #fff;
+}
+
+/* 승인 상태 배지 */
+.badgeApproved {
+  background-color: #e6fcf5;
+  color: #0ca678;
+}
+
+/* 대기 상태 배지 */
+.badgePending {
+  background-color: #fff3bf;
+  color: #f08c00;
+}
+
+/* 거절/강퇴 같은 오류 계열 배지 */
+.badgeError {
+  background-color: #ffe3e3;
+  color: #e03131;
+}
+
+/* 취소/기본 상태용 회색 배지 */
+.badgeGray {
+  background-color: #f1f3f5;
+  color: #adb5bd;
+}

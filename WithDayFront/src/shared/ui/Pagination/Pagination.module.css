@@ -1,0 +1,93 @@
+.pagination_wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.pagination_wrap > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  cursor: pointer;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  border-radius: 999px;
+  box-shadow: var(--shadow-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.pagination_wrap > button:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+  border-color: var(--color-accent-light);
+  color: var(--color-accent-dark);
+  box-shadow: var(--shadow-md);
+}
+
+.pagination_wrap > button:disabled {
+  cursor: not-allowed;
+  color: var(--color-text-disabled);
+  background: var(--color-bg);
+  border-color: var(--color-border-light);
+  box-shadow: none;
+  transform: none;
+}
+
+.navButton {
+  min-width: 42px;
+  background: var(--color-surface-soft);
+  color: var(--color-primary);
+  border-color: transparent;
+}
+
+.navIcon {
+  font-size: 1.15rem;
+}
+
+.pageButton {
+  background: var(--color-surface);
+}
+
+.pagination_wrap > .active {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 768px) {
+  .pagination_wrap > button {
+    min-width: 30px;
+    height: 30px;
+    padding: 0 6px;
+    font-size: 13px;
+  }
+
+  .navButton {
+    min-width: 30px;
+  }
+
+  .navIcon {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination_wrap > .firstLastButton {
+    display: none !important;
+  }
+}
