@@ -68,7 +68,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         // 💡 만약 리액트가 3000번이라면 "http://localhost:3000"도 추가해주는 게 안전합니다.
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173",
-                "https://d1op3dpemmexg5.cloudfront.net"
+                "https://d3q55wlejmib0v.cloudfront.net/"
                 ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
