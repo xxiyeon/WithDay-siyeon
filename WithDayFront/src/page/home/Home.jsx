@@ -9,7 +9,7 @@ import { fetchSchedules } from "../../features/schedule/api";
 import { useAuthStore } from "../../features/auth/store/authStore";
 
 /*
- * 홈 탭은 전체 일정 중 일부만 "추천/미리보기" 형태로 보여준다.
+ * 홈 탭은 전체 일정 중 일부만 "추천/미리보기" 형태로 보여준다. 
  * 탐색 탭처럼 검색/카테고리 UI를 직접 노출하지 않고, 전체 일정 중 홈에 적합한 일부만 가볍게 구성한다.
  */
 const MAX_HOME_ITEMS = 8;
