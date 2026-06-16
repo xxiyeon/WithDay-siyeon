@@ -15,7 +15,7 @@ import { useAuthStore } from "../../features/auth/store/authStore";
 const MAX_HOME_ITEMS = 8;
 
 /*
- * React 리스트 key는 가능하면 서버 PK(id)를 사용한다.
+ * React 리스트 key는 가능하면 서버 PK(id)를 사용한다. 
  * 임시 데이터나 이전 API 응답처럼 id가 비어 있을 수 있어 scheduleId와 제목/날짜 조합을 fallback으로 둔다.
  */
 const getScheduleKey = (schedule) =>
